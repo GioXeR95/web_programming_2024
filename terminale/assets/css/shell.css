@@ -31,6 +31,8 @@ body, html{
 .desktop > .window{
     display: inline-block;
     position: relative;
+    margin-top: 20px;
+    margin-left: 20px;
     border: 2px solid black;
     min-width: 300px;
     min-height: 50px;
@@ -42,6 +44,33 @@ body, html{
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     z-index:1;
+}
+
+/*shortcut and desktop icon*/
+.shortcut{
+    position:absolute;
+    width:50px;
+    height:50px;
+    margin-top:10px;
+    margin-left:10px;
+}
+.shortcut:hover{
+    top:-1px;
+    left:-1px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-color: #006eff92;
+    border-radius: 2px;
+}
+.shortcut:active{
+    background-color: #0053bfac;
+}
+.app-title{
+    color:white;
+    font-size:16px;
+}
+.shortcut:hover > div.app-title{
+    background-color:#2800b7ac;
+    border-radius: 2px;
 }
 /*Titlebar of the window*/
 .desktop > .window > .titlebar{
@@ -135,6 +164,7 @@ input[type="radio"][for="close"][value="1"], .minimize-radio-button {
     top:0;
     right:0;
     bottom: 0;
+    margin: 0;
     height:100% !important;
     width:100% !important;
 }
@@ -205,21 +235,54 @@ input[type="radio"][for="close"][value="1"], .minimize-radio-button {
     min-width:300px;
     height:calc(100% - 30px);
     width:100%;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
+    background-color: #585858;
+    background-color: #00275bb8;
+    color:white;
     word-wrap: break-word;
     overflow: auto;
 }
 .window > .content> .command::before{
-    content: "magic@winzoz>";
-    display: inline-block;
-    color: #000000;
+    content: "magic@winzoz> ";
+    display: inline;
+    color: #4f93ff;
     font-weight: bold;
     margin: 0 2px;
 }
+/*Finally found a way to make a new child on enter! display: list-item*/
 .window > .content> .command{
+    display: list-item;
     outline: none;
     
 }
+.window > .content> .command > div::before{
+    content: "magic@winzoz> ";
+    display: inline;
+    color: #4f93ff;
+    font-weight: bold;
+    margin: 0 2px;
+
+}
+/*.window > .content > .command>div:last-of-type{
+    -webkit-user-modify: read-write;
+    -moz-user-modify: read-write;
+    display:list-item;
+    color:red;
+    outline: none;
+}
+
+.window>.content>.command>div:not(:last-of-type){
+    -webkit-user-modify: read-only;
+    -moz-user-modify: read-only;
+    color: blue;
+    outline: none;
+}
+.command > div:not(:last-of-type):nth-last-child(n + 1){
+    -webkit-user-modify: read-only;
+    -moz-user-modify: read-only;
+    color:yellow;
+}*/
+
 /* taskbar/startbar */
 .taskbar{
     position: fixed;
@@ -305,6 +368,10 @@ input[type="radio"][for="close"][value="1"], .minimize-radio-button {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+
+}
+.desktop > .start-menu-trick > .start-menu > .start-menu-header > p{
+    color:#509cff;
 
 }
 .desktop > .start-menu-trick > .start-menu > .start-menu-header > img{
@@ -415,6 +482,10 @@ input[type="radio"][for="close"][value="1"], .minimize-radio-button {
     justify-content: space-between;
     padding: 0 20px;
 }
+.desktop:has(input[type="radio"][for="logout"][value="1"]:checked) > .logout-background > .logout-menu > .logout-header > p{
+    color:#509cff;
+}
+
 .desktop:has(input[type="radio"][for="logout"][value="1"]:checked) > .logout-background > .logout-menu > .logout-header >img{
     height: 50px;
 }
@@ -498,15 +569,6 @@ input[type="radio"][for="logout"][value="2"]:checked{
     width:20px;
     height:20px;
 }
-.shortcut{
-    position:absolute;
-    margin-top:10px;
-    margin-left:10px;
-}
-.app-title{
-    color:white;
-    font-size:16px;
-}
 .bold{
     font-weight: bold;
 }
@@ -528,5 +590,5 @@ input[type="radio"][for="logout"][value="2"]:checked{
     background: rgb(0, 83, 191);
 }
 ::-webkit-scrollbar-thumb:active {
-    background: #00275b;
+    background: #000000;
 }
