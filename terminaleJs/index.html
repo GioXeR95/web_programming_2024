@@ -3,84 +3,27 @@
 <head>
     <title>Winzoz</title>
     <link rel="stylesheet" type="text/css" href="assets/css/shell.css"/>
+    <script src="assets/js/terminal.js"></script>
 </head>
 <body>
     <div class="desktop prevent-select">
         <div class="background">
-            <div class="shortcut" >
+            <div class="shortcut app-launch" >
                 <img class='icon' src="assets/img/shell.png">
-                <input class="shortcut-radio-button" type="radio" name="minimize" for="minimize" value="2" >
                 <div class="app-title">A Shell</div>
             </div>
         </div>
-
-        <div class="window">
-            
-            <div class="titlebar">
-                <div class="group-buttons">
-                    <div class="button close">X<input type="radio" name="minimize" for="close" value="1"></div>
-                    <div class="button minimize">🗕<input class="minimize-radio-button" type="radio" name="minimize" for="minimize" value="2"></div>
-                    <div class="button maximize">❒<input type="checkbox" class=" " for="maximize"></div>
-                    
-                </div>
-                <p><img class='small-icon' src="assets/img/shell.png">A Shell</p>
-            </div>
-            <div class="content">
-                <div class="command" contenteditable>
-                </div>
-            </div>
     </div>
-        <div class="start-menu-trick">
-            <div class="start-menu">
-                <div class="start-menu-header">
-                    <img src="assets/img/winzoz-logo.png">
-                    <p class="bold">Winzoz</p>
-                </div>
-                <div class="start-menu-content">
-                    <div class="start-menu-item">
-                        <img src="assets/img/shell.png">
-                        <input class='checked-menu-item ' type="radio" name="minimize" for="minimize" value="2" >
-                        <p>A Shell</p>
-                    </div>
-                </div>
-                <div class="start-menu-content">
-                    <div class="start-menu-item">
-                        <img src="assets/img/logout.png">
-                        <input class='checked-menu-item' type="radio" name="logout" for="logout" value="1" >
-                        <p>Log out</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="taskbar">
+    <div class="taskbar prevent-select">
             <div class="start-icon start-button">
                 <img src="assets/img/winzoz-logo.png">
             </div>
-            <div class="start-icon shell">
+            <div class="start-icon shell app-launch">
                 <img src="assets/img/shell.png">
-                <input class="start-icon-radio-button" type="radio" name="minimize" for="minimize" value="2" checked>
             </div>
             <div class="time">
                 <p>12:34</p>
             </div>
         </div>
-        <div class="logout-background">
-            <div class="logout-menu">
-                <div class="logout-header">
-                    <img src="assets/img/winzoz-logo.png">
-                    <p class="bold">Winzoz</p>
-                </div>
-                <div class="logout-content">
-                    <img src="assets/img/user.jpg">
-                    <div class="username bold">Magic</div>
-                    <input type="password" name="password">
-                    <div class="login-button bold">Log in 
-                        <input type="radio" name="logout" for="logout" value="2" >
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
 </body>
 </html>
