@@ -146,3 +146,81 @@ body, html{
     position:relative;
     top:4px;
 }
+/*Windows buttons hover/active*/
+.window > .titlebar > .group-buttons > div:hover{
+    background-color: rgb(0, 83, 191);
+}
+.window > .titlebar > .group-buttons > div:active{
+    background-color: #00275b;
+}
+/* Fixes to adjusts the window buttons*/
+.window > .titlebar > .group-buttons > .button{
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    margin: 2px 5px;
+    text-align: center;
+    padding: 3px;
+    vertical-align: middle;
+    background-color: #006eff;
+    border-radius: 50%;
+    border: 1px solid black;
+
+}
+.group-buttons > .maximize{
+    position: absolute;
+    top: 0;
+    left: 60px;
+    background-color: #006eff;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid black;
+}
+.group-buttons > .close{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.group-buttons > .minimize{
+    position: absolute;
+    top: 0;
+    left: 30px;
+}
+
+/*Content of the Shell Window */
+.window > .content{
+    position: absolute;
+    top: 30px;
+    left: 0;
+    min-height:120px;
+    min-width:300px;
+    height:calc(100% - 30px);
+    width:100%;
+    /*background-color: #ffffff;*/
+    background-color: #585858;
+    background-color: #00275bb8;
+    color:white;
+    word-wrap: break-word;
+    overflow: auto;
+}
+.window > .content> .command::before{
+    content: "magic@winzoz> ";
+    display: inline;
+    color: #4f93ff;
+    font-weight: bold;
+    margin: 0 2px;
+}
+/*Finally found a way to make a new child on enter! display: list-item*/
+.window > .content> .command{
+    display: list-item;
+    outline: none;
+    
+}
+.window > .content> .command > div::before{
+    content: "magic@winzoz> ";
+    display: inline;
+    color: #4f93ff;
+    font-weight: bold;
+    margin: 0 2px;
+
+}
