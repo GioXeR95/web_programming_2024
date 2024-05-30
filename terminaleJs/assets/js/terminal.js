@@ -8,7 +8,7 @@
         "width" : 500,
         "position" : [20,20],
         "commands" : [],
-        "history" : [["A Shell",0],["Welcome to the terminal! Type 'help' to get started!",0],["help",1]],
+        "init" : [["A Shell",0],["Welcome to A Shell! Type 'help' to get started!",0],["",1]],
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -19,7 +19,7 @@
                         <p><img class='small-icon' src="assets/img/shell.png">A Shell</p>
                     </div>
                     <div class="content" >
-                        <div class="command" contenteditable>
+                        <div class="commands" >
                         
                         </div>
                     </div>
@@ -79,10 +79,10 @@
                         const shell_window = document.querySelector(".window");
                         shell_window.style.height = ashell_terminal.height + "px";
                         shell_window.style.width = ashell_terminal.width + "px";
-                        const commands = document.querySelector(".command");
-                        for(let i = 0; i < ashell_terminal.history.length; i++){
-                            //commands.innerHTML += ashell_terminal.history[i] + "<br>";
-                            printf(ashell_terminal.history[i][0], ashell_terminal.history[i][1]);
+                        const commands = document.querySelector(".commands");
+                        commands.classList.add("enable-select");
+                        for(let i = 0; i < ashell_terminal.init.length; i++){
+                            printf(ashell_terminal.init[i][0], ashell_terminal.init[i][1]);
                         }
 
                         //logic changes
@@ -158,10 +158,11 @@
             new ResizeObserver(store_sizes).observe(shell_window)
         }
         function printf(text, type=0){
-            const commands = document.querySelector(".command");
+            const commands = document.querySelector(".commands");
             const command = document.createElement("div");
             commands.appendChild(command);
             
+            const text_span = document.createElement("span");
             if(type==1){
                 console.log("type 1",text)
                 const user = document.createElement("span");
@@ -172,12 +173,69 @@
                 command.appendChild(user);
                 
             }
-            command.innerHTML += text;
+            text_span.innerHTML = text;
+            text_span.classList.add("command");
+            command.appendChild(text_span);
+            
+            const user_inputs = commands.querySelectorAll(".command");
+            for(let i = 0; i < user_inputs.length-1; i++){
+                user_inputs[i].removeAttribute("contenteditable");
+                
+            }
+            if(type==1){
+                text_span.setAttribute("contenteditable","true");
+                text_span.focus();
+                text_span.style.outline = "none";
+                text_span.addEventListener("keydown", (e)=>{
+                    if(e.key === "Enter"){
+                        e.preventDefault();
+                        handle_command(text_span);
+                    }
+                });
+            }
             
             
         }
-        
-
+        function replaceAll(str, find, replace) {
+            return str.replace(new RegExp(find, 'g'), replace);
+          }
+        function handle_command(command){
+            const text = command.innerHTML;
+            let actual_command = text;
+            actual_command=replaceAll(actual_command,"&nbsp;", " ");
+            while(actual_command[0] === " "){
+                actual_command=actual_command.substring(1);
+            }
+            switch(actual_command){
+                case "help":
+                    printf("Available commands:",0);
+                    printf("help - shows this message",0);
+                    printf("clear - clears the terminal",0);
+                    printf("exit - closes the terminal",0);
+                    break;
+                case "clear":
+                    const commands = document.querySelector(".commands");
+                    commands.innerHTML = "";
+                    break;
+                case "exit":
+                    const terminal = document.querySelector(".terminal");
+                    terminal.remove();
+                    ashell_terminal.opened = false;
+                    ashell_terminal.running = false;
+                    break;
+                case "":
+                    break;
+                default:
+                    if(text.length < 20)
+                        printf("Command '"+actual_command+"' not found. Type 'help' to see what A Shell can do.",0);
+                    else{
+                        printf("Command not found. Type 'help' to see what A Shell can do.",0);
+                    }
+                    break;
+            }
+            if(text != "exit")
+                printf("",1);
+        }
     }; 
 
 })();

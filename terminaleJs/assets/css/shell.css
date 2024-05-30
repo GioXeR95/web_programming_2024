@@ -2,11 +2,24 @@
     font-family: 'Roboto';
     src: url('../font/Roboto-Regular.ttf');
   }
-  .prevent-select {
+.prevent-select {
     -webkit-user-select: none;
     -ms-user-select: none; 
     user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
 }
+.enable-select {
+    -webkit-user-select: text;
+    -ms-user-select: text; 
+    user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -o-user-select: text;
+}
+
+
 body, html{
     margin: 0;
     padding: 0;
@@ -215,11 +228,7 @@ body, html{
     overflow: auto;
 }
 /*Finally found a way to make a new child on enter! display: list-item*/
-.window > .content> .command{
-    display: list-item;
-    outline: none;
-    
-}
-.window > .content> .command > div{
+
+.window > .content> .commands > div{
     margin: 0 2px;
 }
