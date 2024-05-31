@@ -1,5 +1,9 @@
 ( ()=>{
     //Terminal with js!
+    let system = {
+        "time" : "",
+        "timeout_timer": ""
+    }
     const ashell_terminal = {
         "running" : false,
         "opened" : false,
@@ -34,7 +38,27 @@
         font_weight: "bold",
         margin: "0 2px"
     }
+    function startTime() {
+        system.time = new Date();
+        let h = system.time.getHours();
+        let m = system.time.getMinutes();
+        //if i need seconds: let s = system.time.getSeconds();
+        h = checkTime(h);
+        m = checkTime(m);
+        //s = checkTime(s);
+        document.querySelector('.time').querySelector("p").innerHTML = h + ":" + m;
+        system.timeout_timer = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+        if(i < 10){
+            i = "0" + i;
+        }
+        return i;
+    }
     window.onload = function(){
+        
+        startTime();
+
         const starting_points = document.querySelectorAll(".app-launch");
         for(let i = 0; i < starting_points.length; i++){
             starting_points[i].addEventListener("click", ()=>{
@@ -199,24 +223,59 @@
         }
         function replaceAll(str, find, replace) {
             return str.replace(new RegExp(find, 'g'), replace);
-          }
+        }
+
         function handle_command(command){
             const text = command.innerHTML;
             //ashell_terminal.history.push(text);
             //make a function to handle history later
             let actual_command = text;
             actual_command=replaceAll(actual_command,"&nbsp;", " ");
+
             while(actual_command[0] === " "){
                 actual_command=actual_command.substring(1);
             }
             let params = [];
+            if(actual_command.includes(" ")){
+                params = actual_command.split(" ");
+                params.shift();
+            }
+            actual_command = actual_command.split(" ")[0];
 
+            console.log("actual_command: ",actual_command);
+            console.log("params: ",params);
             switch(actual_command){
+                case "time":
+                    printf(system.time,0);
+                    break;
                 case "help":
-                    printf("Available commands:",0);
-                    printf("help - shows this message",0);
-                    printf("clear - clears the terminal",0);
-                    printf("exit - closes the terminal",0);
+                    if(params.length > 0){
+                        switch(params[0]){
+                            case "clear":
+                                printf("clear - clears the terminal, doesn't takes other params",0);
+                                break;
+                            case "exit":
+                                printf("exit - closes the terminal, doesn't takes other params",0);
+                                break;
+                            case "help":
+                                printf("help - shows this message",0);
+                                printf("help [command] - shows help for a specific command",0);
+                                break;
+                            case "time":
+                                printf("time - shows the current time, doesn't takes other params",0);
+                                break;
+                            default:
+                                printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
+                                break;
+                        }
+                    }
+                    else{
+                        printf("Available commands:",0);
+                        printf("help - shows this message",0);
+                        printf("clear - clears the terminal",0);
+                        printf("exit - closes the terminal",0);
+                        printf("time - shows the current time",0);
+                    }
                     break;
                 case "clear":
                     const commands = document.querySelector(".commands");
