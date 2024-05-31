@@ -9,6 +9,7 @@
         "position" : [20,20],
         "commands" : [],
         "init" : [["A Shell",0],["Welcome to A Shell! Type 'help' to get started!",0],["",1]],
+        "history" : [],
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -201,11 +202,15 @@
           }
         function handle_command(command){
             const text = command.innerHTML;
+            //ashell_terminal.history.push(text);
+            //make a function to handle history later
             let actual_command = text;
             actual_command=replaceAll(actual_command,"&nbsp;", " ");
             while(actual_command[0] === " "){
                 actual_command=actual_command.substring(1);
             }
+            let params = [];
+
             switch(actual_command){
                 case "help":
                     printf("Available commands:",0);
