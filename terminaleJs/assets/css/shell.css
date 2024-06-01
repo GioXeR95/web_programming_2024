@@ -286,3 +286,13 @@ body, html{
     background-color: #000;
     color: #616161;
 }
+
+.app-icon-running{
+    border-bottom: 2px solid #006eff;
+    background-color: #4b99ff48;
+    height: calc(100% - 2px);
+    padding-bottom: -2px;
+}
+.app-icon-open{
+    background-color: #6e7fff;
+}

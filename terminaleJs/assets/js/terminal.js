@@ -182,7 +182,9 @@
                     if(ashell_terminal.opened){
                         //terminal is opened so it should get minimized
                         //change state to opened=false
-
+                        const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+                        app_taskbar.classList.add("app-icon-running");
+                        app_taskbar.classList.remove("app-icon-open");
                         //visual changes
                         terminal.style.display = "none";
                         //logic changes
@@ -190,7 +192,9 @@
                     }
                     else{
                         //terminal isn't opened but it's running in background
-
+                        const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+                        app_taskbar.classList.add("app-icon-running");
+                        app_taskbar.classList.add("app-icon-open");
                         //visual changes
                         terminal.style.display = "inline-block";
                         //logic changes
@@ -233,6 +237,9 @@
                         make_minimize_button_work();
                         make_maximize_button_work();
                         make_resize_update_values();
+                        const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+                        app_taskbar.classList.add("app-icon-running");
+                        app_taskbar.classList.add("app-icon-open");
                     }
                 }
             });
@@ -245,6 +252,10 @@
                     //close the terminal
                     //visual changes
                     const terminal = document.querySelector(".terminal");
+                    //taskbar visual changes
+                    const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+                    app_taskbar.classList.remove("app-icon-running");
+                    app_taskbar.classList.remove("app-icon-open");
                     terminal.remove();
                     //logic changes
                     ashell_terminal.opened = false;
@@ -260,6 +271,10 @@
                     //visual changes
                     const terminal = document.querySelector(".terminal");
                     terminal.style.display = "none";
+                    //taskbar visual changes
+                    const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+                    app_taskbar.classList.add("app-icon-running");
+                    app_taskbar.classList.remove("app-icon-open");
                     //logic changes
                     ashell_terminal.opened = false;
                 });
@@ -533,7 +548,7 @@
                     else{
                         if(params.length > 0 && params[0] === "-l"){
                             for(let i = 0; i < system.path.current.children.length; i++){
-                                printf('"'+system.path.current.children[i].name+"' -- type: "+system.path.current.children[i].type,0);
+                                printf('"'+system.path.current.children[i].name+'" -- type: '+system.path.current.children[i].type,0);
                             }
                         }
                         else{
