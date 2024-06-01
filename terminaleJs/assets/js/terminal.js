@@ -1,4 +1,47 @@
 ( ()=>{
+
+    
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        const titlebar = document.querySelector(".titlebar");
+        if (titlebar) {
+            titlebar.onmousedown = dragMouseDown;
+        }
+    
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+    
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            if((elmnt.offsetTop - pos2) > 0 && (elmnt.offsetLeft - pos1) > 0 && (elmnt.offsetLeft - pos1) < window.innerWidth - elmnt.clientWidth && (elmnt.offsetTop - pos2) < window.innerHeight - elmnt.clientHeight-45){
+                ashell_terminal.position[0] = elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                ashell_terminal.position[1] = elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                console.log(ashell_terminal.position);
+            }
+        }
+    
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
     //Terminal with js!
     class fs_node{
         constructor(name, type, parent){
@@ -48,6 +91,10 @@
         "maximized" : false,
         "height" : 250,
         "width" : 500,
+        "backup":{
+            "height" : 250,
+            "width" : 500
+        },
         "position" : [20,20],
         "init" : [["A Shell",0],["Welcome to A Shell! Type 'help' to get started!",0],["",1]],
         "history" : {
@@ -172,6 +219,7 @@
                         const shell_window = document.querySelector(".window");
                         shell_window.style.height = ashell_terminal.height + "px";
                         shell_window.style.width = ashell_terminal.width + "px";
+                        dragElement(shell_window);
                         const commands = document.querySelector(".commands");
                         commands.classList.add("enable-select");
                         for(let i = 0; i < ashell_terminal.init.length; i++){
@@ -227,12 +275,19 @@
 
                         const shell_window = document.querySelector(".window");
                         shell_window.classList.remove("maximized");
+                        shell_window.style.height = ashell_terminal.backup.height + "px";
+                        shell_window.style.width = ashell_terminal.backup.width + "px";
+                        shell_window.style.top = ashell_terminal.position[0];
+                        shell_window.style.left = ashell_terminal.position[1];
                         //logic changes
                         ashell_terminal.maximized = false;
                     }
                     else{
                         const shell_window = document.querySelector(".window");
                         shell_window.classList.add("maximized");
+                        ashell_terminal.backup.height = ashell_terminal.height;
+                        ashell_terminal.backup.width = ashell_terminal.width;
+                        shell_window.style="";
                         //logic changes
                         ashell_terminal.maximized = true;
                     }

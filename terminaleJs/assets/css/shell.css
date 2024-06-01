@@ -118,8 +118,8 @@ body, html{
 .window{
     display: inline-block;
     position: relative;
-    margin-top: 20px;
-    margin-left: 20px;
+    /*margin-top: 20px;*/
+    /*margin-left: 20px;*/
     border: 2px solid black;
     min-width: 400px;
     min-height: 100px ;
@@ -152,7 +152,8 @@ body, html{
     background-color: #424242;
     display: flex;
     justify-content: space-between;
-    align-items: center;   
+    align-items: center;
+
 }
 .window > .titlebar > p{
     position: absolute;
