@@ -232,3 +232,43 @@ body, html{
 .window > .content> .commands > div{
     margin: 0 2px;
 }
+
+/*crashes*/
+.bluescreen{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0000ff;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    font-size: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 1000;
+}
+.bluescreen > div{
+    margin-left:10%;
+    
+    margin-bottom:1%;
+}
+.sad-face{
+    margin-top: 10%;
+    font-size: 150px;
+}
+.error{
+    font-size: 40px;
+}
+.error-code{
+    font-size: 20px;
+}
+.error-message{
+    font-size: 20px;
+}
+.restart{
+    cursor: pointer;
+    color: #00ff00;
+    font-size: 20px;
+}

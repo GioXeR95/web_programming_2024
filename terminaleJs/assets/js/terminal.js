@@ -12,8 +12,28 @@
         "time" : "",
         "timeout_timer": "",
         "path" :{
-            "current" : new fs_node("C:","dir",null),
+            "current" : "",
+            "system32" : "",
+            "winzoz" : "",
+            "os" : "",
+            "root" : new fs_node("C:","dir",null)
         }
+    }
+    function loadSystem(){
+        system.path.current = system.path.root;
+        system.path.current.children.push(new fs_node("Users","dir",system.path.current));
+        system.path.current.children.push(new fs_node("Program Files","dir",system.path.current));
+        system.path.current.children.push(new fs_node("Program Files (x86)","dir",system.path.current));
+        const win_folder = new fs_node("Winzoz","dir",system.path.current)
+        system.path.current.children.push(win_folder);
+        const system32_folder = new fs_node("System32","dir",win_folder);
+        win_folder.children.push(system32_folder);
+        const os_file = new fs_node("OS","file",system32_folder);
+        system32_folder.children.push(os_file);
+        system.path.winzoz = win_folder;
+        system.path.system32 = system32_folder;
+        system.path.os = os_file;
+        //system.path.current=system.path.current.children[0];
     }
     const user_shell = {
         content : "magic@winzoz: ",
@@ -52,7 +72,40 @@
         
         
     }
-
+    function blueScreen(){
+        const body =  document.querySelector("body");
+        console.log(body);
+        body.innerHTML = "";
+        clearTimeout(system.timeout_timer);
+        const screen = document.createElement("div");
+        screen.classList.add("bluescreen");
+        body.appendChild(screen);
+        const sad_face = document.createElement("div");
+        sad_face.classList.add("sad-face");
+        sad_face.innerHTML = ":(";
+        screen.appendChild(sad_face);
+        const error = document.createElement("div");
+        error.classList.add("error");
+        error.innerHTML = "An error has occurred";
+        screen.appendChild(error);
+        const error_code = document.createElement("div");
+        error_code.classList.add("error-code");
+        error_code.innerHTML = "Error code: 0x00000032";
+        screen.appendChild(error_code);
+        const error_message = document.createElement("div");
+        error_message.classList.add("error-message");
+        error_message.innerHTML = "The system has encountered an error and needs to restart";
+        error_message.innerHTML += "<br>";
+        error_message.innerHTML += "System32 and Winzoz folders have been deleted. Please reinstall the OS.";
+        screen.appendChild(error_message);
+        const restart = document.createElement("div");
+        restart.classList.add("restart");
+        restart.innerHTML = "Install Winzoz";
+        screen.appendChild(restart);
+        restart.addEventListener("click",()=>{
+            location.reload();
+        });
+    }
     function startTime() {
         system.time = new Date();
         let h = system.time.getHours();
@@ -73,7 +126,7 @@
     window.onload = function(){
         
         startTime();
-
+        loadSystem();
         const starting_points = document.querySelectorAll(".app-launch");
         for(let i = 0; i < starting_points.length; i++){
             starting_points[i].addEventListener("click", ()=>{
@@ -295,41 +348,77 @@
 
             console.log(text);
             switch(actual_command){
-                case "touch":
+                case "del":
                     if(params.length > 0){
-                        let name = params[0];
-                        let valid = true;
-                        for(let i = 0; i < name.length; i++){
-                            if(name[i] === "\\"){
-                                valid = false;
+                        if(params[0] === "-h"){
+                            handle_command("help del");
+                            enable_user_input = false;
+                        }
+                        else{
+                            let found = false;
+                            let node = system.path.current;
+                            for(let i = 0; i < system.path.current.children.length; i++){
+                                if(system.path.current.children[i].name === params[0]){
+                                    found = true;
+                                    node = system.path.current.children[i];
+                                    system.path.current.children.splice(i,1);
+                                    i = system.path.current.children.length;
+                                }
+                                if(found && (node===system.path.system32 || node===system.path.os || node===system.path.winzoz)){
+                                    enable_user_input = false;
+                                    blueScreen();
+                                }
+                            }
+                            if(!found){
+                                printf("File or directory not found",0);
                             }
                         }
-                        if(valid){
-                            let exists = -1;
-                            for(let i = 0; i < system.path.current.children.length; i++){
-                                if(system.path.current.children[i].name === name){
+
+                    }
+                    else{
+                        printf("Invalid file or directory name",0);
+                    }  
+                    break;
+                case "touch":
+                    if(params.length > 0){
+                        if(params[0] === "-h"){
+                            handle_command("help touch");
+                            enable_user_input = false;
+                        }
+                        else{
+                            let name = params[0];
+                            let valid = true;
+                            for(let i = 0; i < name.length; i++){
+                                if(name[i] === "\\"){
                                     valid = false;
-                                    exists = i;
-                                    i = system.path.current.children.length;
                                 }
                             }
                             if(valid){
-                                let node = new fs_node(name,"file",system.path.current);
-                                system.path.current.children.push(node);
-                            }
-                            else{
-                                if(system.path.current.children[exists].type === "file"){
-                                    printf("File already exists",0);
+                                let exists = -1;
+                                for(let i = 0; i < system.path.current.children.length; i++){
+                                    if(system.path.current.children[i].name === name){
+                                        valid = false;
+                                        exists = i;
+                                        i = system.path.current.children.length;
+                                    }
+                                }
+                                if(valid){
+                                    let node = new fs_node(name,"file",system.path.current);
+                                    system.path.current.children.push(node);
                                 }
                                 else{
-                                    printf("The name used it's already used on a directory",0);
+                                    if(system.path.current.children[exists].type === "file"){
+                                        printf("File already exists",0);
+                                    }
+                                    else{
+                                        printf("The name used it's already used on a directory",0);
+                                    }
                                 }
                             }
+                            else{
+                                printf("Invalid file name",0);
+                            }
                         }
-                        else{
-                            printf("Invalid file name",0);
-                        }
-
                     }
                     else{
                         printf("Invalid file name",0);
@@ -337,27 +426,33 @@
                     break;
                 case "cd":
                     if(params.length > 0){
-                        if(params[0] === ".."){
-                            if(system.path.current.parent !== null){
-                                system.path.current = system.path.current.parent;
-                            }
+                        if(params[0] === "-h"){
+                            handle_command("help cd");
+                            enable_user_input = false;
                         }
                         else{
-                            let found = false;
-                            for(let i = 0; i < system.path.current.children.length; i++){
-                                if(system.path.current.children[i].name === params[0]){
-                                    if(system.path.current.children[i].type === "dir"){
-                                        system.path.current = system.path.current.children[i];
-                                        found = true;
-                                    }
-                                    else{
-                                        printf("Not a directory",0);
-                                        found = true;
-                                    }
+                            if(params[0] === ".."){
+                                if(system.path.current.parent !== null){
+                                    system.path.current = system.path.current.parent;
                                 }
                             }
-                            if(!found){
-                                printf("Directory not found",0);
+                            else{
+                                let found = false;
+                                for(let i = 0; i < system.path.current.children.length; i++){
+                                    if(system.path.current.children[i].name === params[0]){
+                                        if(system.path.current.children[i].type === "dir"){
+                                            system.path.current = system.path.current.children[i];
+                                            found = true;
+                                        }
+                                        else{
+                                            printf("Not a directory",0);
+                                            found = true;
+                                        }
+                                    }
+                                }
+                                if(!found){
+                                    printf("Directory not found",0);
+                                }
                             }
                         }
                     }
@@ -393,40 +488,45 @@
                     break;
                 case "mkdir":
                     if(params.length > 0 && params[0].length > 0){
-                        let name = params[0];
-                        let valid = true;
-                        for(let i = 0; i < name.length; i++){
-                            if(name[i] === "\\"){
-                                valid = false;
-                            }
+                        if(params[0] === "-h"){
+                            handle_command("help mkdir");
+                            enable_user_input = false;
                         }
-                        if(valid){
-                            let exists = -1;
-                            for(let i = 0; i < system.path.current.children.length; i++){
-                                if(system.path.current.children[i].name === name){
+                        else{
+                            let name = params[0];
+                            let valid = true;
+                            for(let i = 0; i < name.length; i++){
+                                if(name[i] === "\\"){
                                     valid = false;
-                                    exists = i;
-                                    i = system.path.current.children.length;
                                 }
                             }
                             if(valid){
-                                let node = new fs_node(name,"dir",system.path.current);
-                                system.path.current.children.push(node);
-                            }
-                            else{
-                                if(system.path.current.children[exists].type === "dir"){
-                                    printf("Directory already exists",0);
+                                let exists = -1;
+                                for(let i = 0; i < system.path.current.children.length; i++){
+                                    if(system.path.current.children[i].name === name){
+                                        valid = false;
+                                        exists = i;
+                                        i = system.path.current.children.length;
+                                    }
+                                }
+                                if(valid){
+                                    let node = new fs_node(name,"dir",system.path.current);
+                                    system.path.current.children.push(node);
                                 }
                                 else{
-                                    printf("The name used it's already used on a file",0);
+                                    if(system.path.current.children[exists].type === "dir"){
+                                        printf("Directory already exists",0);
+                                    }
+                                    else{
+                                        printf("The name used it's already used on a file",0);
+                                    }
+                                    
                                 }
-                                
+                            }
+                            else{
+                                printf("Invalid directory name",0);
                             }
                         }
-                        else{
-                            printf("Invalid directory name",0);
-                        }
-
                     }
                     else{
                         printf("Invalid directory name",0);
@@ -501,6 +601,23 @@
                                 printf("curl -h - shows this message",0);
                                 printf("the [url] must contain 'http://' or 'https://'. For testing use 'https://jsonplaceholder.typicode.com/users'",0);
                                 break;
+                            case "ls":
+                                printf("ls - shows the files and directories in the current directory",0);
+                                printf("ls -l - shows the files and directories in the current directory with more information",0);
+                                break;
+                            case "cd":
+                                printf("cd [dir] - changes the current directory to [dir]",0);
+                                printf("cd .. - goes to the parent directory",0);
+                                break;
+                            case "mkdir":
+                                printf("mkdir [dir] - creates a new directory named [dir]",0);
+                                break;
+                            case "touch":
+                                printf("touch [file] - creates a new file named [file]",0);
+                                break;
+                            case "del":
+                                printf("del [file] - deletes a file named [file]",0);
+                                break;
                             default:
                                 printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
                                 break;
@@ -517,6 +634,7 @@
                         printf("cd [dir] - changes the current directory to [dir]",0);
                         printf("mkdir [dir] - creates a new directory named [dir]",0);
                         printf("touch [file] - creates a new file named [file]",0);
+                        printf("del [file] - deletes a file named [file]",0);
                     }
                     break;
                 case "clear":
