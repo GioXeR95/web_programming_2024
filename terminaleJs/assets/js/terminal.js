@@ -1,9 +1,27 @@
 ( ()=>{
     //Terminal with js!
+    class fs_node{
+        constructor(name, type, parent){
+            this.name = name;
+            this.type = type;
+            this.parent = parent;
+            this.children = [];
+        }
+    }
     let system = {
         "time" : "",
-        "timeout_timer": ""
+        "timeout_timer": "",
+        "path" :{
+            "current" : new fs_node("C:","dir",null),
+        }
     }
+    const user_shell = {
+        content : "magic@winzoz: ",
+        color: "#4f93ff",
+        font_weight: "bold",
+        margin: "0 2px"
+    }
+
     const ashell_terminal = {
         "running" : false,
         "opened" : false,
@@ -11,9 +29,11 @@
         "height" : 250,
         "width" : 500,
         "position" : [20,20],
-        "commands" : [],
         "init" : [["A Shell",0],["Welcome to A Shell! Type 'help' to get started!",0],["",1]],
-        "history" : [],
+        "history" : {
+            "commands" : [""],
+            "index" : 0
+        },
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -32,12 +52,7 @@
         
         
     }
-    const user_shell = {
-        content : "magic@winzoz> ",
-        color: "#4f93ff",
-        font_weight: "bold",
-        margin: "0 2px"
-    }
+
     function startTime() {
         system.time = new Date();
         let h = system.time.getHours();
@@ -189,9 +204,16 @@
             
             const text_span = document.createElement("span");
             if(type==1){
-                console.log("type 1",text)
                 const user = document.createElement("span");
                 user.innerHTML = user_shell.content;
+                let parent = system.path.current.parent;
+                let path = system.path.current.name+"\\";
+                while(parent !== null){
+                    path = parent.name+"\\" + path;
+                    parent= parent.parent;
+                }
+                user.innerHTML += path;
+                user.innerHTML += "> ";
                 user.style.color = user_shell.color;
                 user.style.fontWeight = user_shell.font_weight;
                 user.style.display = "inline";
@@ -211,10 +233,37 @@
                 text_span.setAttribute("contenteditable","true");
                 text_span.focus();
                 text_span.style.outline = "none";
+                //had to do this so when you copy it doesn't copy the html tags too :/
+                text_span.addEventListener("paste", (e)=>{
+                    e.preventDefault();
+                    const text = e.clipboardData.getData("text/plain");
+                    document.execCommand("insertText", false, text);
+                });
                 text_span.addEventListener("keydown", (e)=>{
-                    if(e.key === "Enter"){
+                    //input the command
+                    if(e.key === "Enter"){ 
                         e.preventDefault();
-                        handle_command(text_span);
+                        ashell_terminal.history.index = 0;
+                        handle_command(text_span.innerHTML);
+                    }
+                    //clear the input
+                    if(e.key === "Escape"){
+                        e.preventDefault();
+                        text_span.innerHTML = "";
+                    }
+                    //history up
+                    if(e.key === "ArrowUp"){
+                        e.preventDefault();
+                        if(ashell_terminal.history.index < ashell_terminal.history.commands.length-1 ){
+                            text_span.innerHTML = ashell_terminal.history.commands[++ashell_terminal.history.index];
+                        }
+                    }
+                    //history down
+                    if(e.key === "ArrowDown"){
+                        e.preventDefault();
+                        if(ashell_terminal.history.index > 0){
+                            text_span.innerHTML = ashell_terminal.history.commands[--ashell_terminal.history.index];
+                        }
                     }
                 });
             }
@@ -225,10 +274,12 @@
             return str.replace(new RegExp(find, 'g'), replace);
         }
 
-        function handle_command(command){
-            const text = command.innerHTML;
-            //ashell_terminal.history.push(text);
-            //make a function to handle history later
+        async function handle_command(text){
+            let enable_user_input = true;
+            //Remember: 1 is to put the history in the right order
+            //          0 is to not delete any element of the array
+            //          text is what to put in the array
+            ashell_terminal.history.commands.splice(1,0,text);
             let actual_command = text;
             actual_command=replaceAll(actual_command,"&nbsp;", " ");
 
@@ -242,11 +293,192 @@
             }
             actual_command = actual_command.split(" ")[0];
 
-            console.log("actual_command: ",actual_command);
-            console.log("params: ",params);
+            console.log(text);
             switch(actual_command){
+                case "touch":
+                    if(params.length > 0){
+                        let name = params[0];
+                        let valid = true;
+                        for(let i = 0; i < name.length; i++){
+                            if(name[i] === "\\"){
+                                valid = false;
+                            }
+                        }
+                        if(valid){
+                            let exists = -1;
+                            for(let i = 0; i < system.path.current.children.length; i++){
+                                if(system.path.current.children[i].name === name){
+                                    valid = false;
+                                    exists = i;
+                                    i = system.path.current.children.length;
+                                }
+                            }
+                            if(valid){
+                                let node = new fs_node(name,"file",system.path.current);
+                                system.path.current.children.push(node);
+                            }
+                            else{
+                                if(system.path.current.children[exists].type === "file"){
+                                    printf("File already exists",0);
+                                }
+                                else{
+                                    printf("The name used it's already used on a directory",0);
+                                }
+                            }
+                        }
+                        else{
+                            printf("Invalid file name",0);
+                        }
+
+                    }
+                    else{
+                        printf("Invalid file name",0);
+                    }
+                    break;
+                case "cd":
+                    if(params.length > 0){
+                        if(params[0] === ".."){
+                            if(system.path.current.parent !== null){
+                                system.path.current = system.path.current.parent;
+                            }
+                        }
+                        else{
+                            let found = false;
+                            for(let i = 0; i < system.path.current.children.length; i++){
+                                if(system.path.current.children[i].name === params[0]){
+                                    if(system.path.current.children[i].type === "dir"){
+                                        system.path.current = system.path.current.children[i];
+                                        found = true;
+                                    }
+                                    else{
+                                        printf("Not a directory",0);
+                                        found = true;
+                                    }
+                                }
+                            }
+                            if(!found){
+                                printf("Directory not found",0);
+                            }
+                        }
+                    }
+                    else{
+                        printf("Invalid directory name",0);
+                    }
+                    break;
+                case "ls":
+                    if(params.length > 0 && params[0] === "-h"){
+                        handle_command("help ls");
+                        enable_user_input = false;
+                    }
+                    else{
+                        if(params.length > 0 && params[0] === "-l"){
+                            for(let i = 0; i < system.path.current.children.length; i++){
+                                printf(system.path.current.children[i].name+" -- "+system.path.current.children[i].type,0);
+                            }
+                        }
+                        else{
+                            if(params.lenght > 0 ){
+                                printf("Invalid parameter",0);
+                                handle_command("help ls");
+                            }
+                            else{
+                                let output = "";
+                                for(let i = 0; i < system.path.current.children.length; i++){
+                                    output += system.path.current.children[i].name + " ";
+                                }
+                                printf(output,0);
+                            }
+                        }
+                    }
+                    break;
+                case "mkdir":
+                    if(params.length > 0 && params[0].length > 0){
+                        let name = params[0];
+                        let valid = true;
+                        for(let i = 0; i < name.length; i++){
+                            if(name[i] === "\\"){
+                                valid = false;
+                            }
+                        }
+                        if(valid){
+                            let exists = -1;
+                            for(let i = 0; i < system.path.current.children.length; i++){
+                                if(system.path.current.children[i].name === name){
+                                    valid = false;
+                                    exists = i;
+                                    i = system.path.current.children.length;
+                                }
+                            }
+                            if(valid){
+                                let node = new fs_node(name,"dir",system.path.current);
+                                system.path.current.children.push(node);
+                            }
+                            else{
+                                if(system.path.current.children[exists].type === "dir"){
+                                    printf("Directory already exists",0);
+                                }
+                                else{
+                                    printf("The name used it's already used on a file",0);
+                                }
+                                
+                            }
+                        }
+                        else{
+                            printf("Invalid directory name",0);
+                        }
+
+                    }
+                    else{
+                        printf("Invalid directory name",0);
+                    }
+                    break;
+                case "curl":
+                    if(params.length > 0){
+                        if(params[0]==="-h"){
+                            handle_command("help curl");
+                            enable_user_input = false;
+                        }
+                        else{
+                            if(params[0].includes("http://") || params[0].includes("https://")){
+                                enable_user_input = false;
+                                fetch(params[0])
+                                .then((response) => {
+                                    if (response.ok) {
+                                      //return response.json();
+                                      return response.text();
+                                    }
+                                    throw new Error('Something went wrong');
+                                  })
+                                .then((data) => {
+                                    //the solution was so simple... yet so hard to find
+                                    data = data.replace(/</g, "&lt;");
+                                    data = data.replace(/>/g, "&gt;");
+                                    printf(data,0);
+                                    printf("",1);
+                                    
+                                })
+                                .catch((error) => {
+                                    printf("Error: "+error,0);
+                                    printf("",1);
+                                });
+                            }
+                            else{
+                                printf("Invalid URL",0);
+                                enable_user_input = true;
+                            }
+                        }
+                    }
+                    break;
                 case "time":
-                    printf(system.time,0);
+                    if(params.length > 0 && params[0] === "-h"){
+                        handle_command("help time");
+                        enable_user_input = false;
+                    }
+                    else{
+                        printf("Current time: ",0);
+                        printf(system.time,0);
+                    }
+                    
                     break;
                 case "help":
                     if(params.length > 0){
@@ -264,6 +496,11 @@
                             case "time":
                                 printf("time - shows the current time, doesn't takes other params",0);
                                 break;
+                            case "curl":
+                                printf("curl [url] - fetches the content of a website",0);
+                                printf("curl -h - shows this message",0);
+                                printf("the [url] must contain 'http://' or 'https://'. For testing use 'https://jsonplaceholder.typicode.com/users'",0);
+                                break;
                             default:
                                 printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
                                 break;
@@ -275,17 +512,35 @@
                         printf("clear - clears the terminal",0);
                         printf("exit - closes the terminal",0);
                         printf("time - shows the current time",0);
+                        printf("curl [url] - fetches the content of a website",0);
+                        printf("ls - shows the files and directories in the current directory",0);
+                        printf("cd [dir] - changes the current directory to [dir]",0);
+                        printf("mkdir [dir] - creates a new directory named [dir]",0);
+                        printf("touch [file] - creates a new file named [file]",0);
                     }
                     break;
                 case "clear":
-                    const commands = document.querySelector(".commands");
-                    commands.innerHTML = "";
+                    if(params.length > 0 && params[0] === "-h"){
+                        handle_command("help clear");
+                        enable_user_input = false;
+                    }
+                    else{
+                        const commands = document.querySelector(".commands");
+                        commands.innerHTML = "";
+                    }
                     break;
                 case "exit":
-                    const terminal = document.querySelector(".terminal");
-                    terminal.remove();
-                    ashell_terminal.opened = false;
-                    ashell_terminal.running = false;
+                    if(params.length > 0 && params[0] === "-h"){
+                        handle_command("help exit");
+                        enable_user_input = false;
+                    }
+                    else{
+                        const terminal = document.querySelector(".terminal");
+                        terminal.remove();
+                        ashell_terminal.opened = false;
+                        ashell_terminal.running = false;
+                        enable_user_input = false;
+                    }
                     break;
                 case "":
                     break;
@@ -297,8 +552,9 @@
                     }
                     break;
             }
-            if(text != "exit")
-                printf("",1);
+            if(enable_user_input )
+                printf(ashell_terminal.history.commands[0],1);
+                
         }
     }; 
 
