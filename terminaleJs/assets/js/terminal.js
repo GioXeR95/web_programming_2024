@@ -147,7 +147,7 @@
         screen.appendChild(error_message);
         const restart = document.createElement("div");
         restart.classList.add("restart");
-        restart.innerHTML = "Install Winzoz";
+        restart.innerHTML = "<span>Install Winzoz</span>";
         screen.appendChild(restart);
         restart.addEventListener("click",()=>{
             location.reload();
@@ -268,7 +268,9 @@
         function make_maximize_button_work(){
             if(ashell_terminal.running && ashell_terminal.opened){
                 const maximize_button = document.querySelector(".button.maximize");
-                maximize_button.addEventListener("click", ()=>{
+                //dblclick event
+                const shell_titlebar = document.querySelector(".titlebar");
+                const maximize = ()=>{
                     //maximize the terminal
                     //visual changes
                     if(ashell_terminal.maximized){
@@ -291,7 +293,9 @@
                         //logic changes
                         ashell_terminal.maximized = true;
                     }
-                });
+                };
+                shell_titlebar.addEventListener("dblclick", maximize);
+                maximize_button.addEventListener("click", maximize);
             }
         }
         function store_sizes(){
@@ -341,6 +345,13 @@
                 text_span.setAttribute("contenteditable","true");
                 text_span.focus();
                 text_span.style.outline = "none";
+                //give focus to the text_span when clicked on the content
+                text_span.focus();
+                const focus_helper = document.querySelector(".content");
+                console.log(focus_helper);
+                focus_helper.addEventListener("click",()=>{
+                    text_span.focus();
+                });
                 //had to do this so when you copy it doesn't copy the html tags too :/
                 text_span.addEventListener("paste", (e)=>{
                     e.preventDefault();
@@ -400,8 +411,7 @@
                 params.shift();
             }
             actual_command = actual_command.split(" ")[0];
-
-            console.log(text);
+            actual_command = actual_command.toLowerCase();
             switch(actual_command){
                 case "del":
                     if(params.length > 0){
@@ -413,7 +423,7 @@
                             let found = false;
                             let node = system.path.current;
                             for(let i = 0; i < system.path.current.children.length; i++){
-                                if(system.path.current.children[i].name === params[0]){
+                                if(system.path.current.children[i].name.toLowerCase() === params[0].toLowerCase()){
                                     found = true;
                                     node = system.path.current.children[i];
                                     system.path.current.children.splice(i,1);
@@ -451,7 +461,7 @@
                             if(valid){
                                 let exists = -1;
                                 for(let i = 0; i < system.path.current.children.length; i++){
-                                    if(system.path.current.children[i].name === name){
+                                    if(system.path.current.children[i].name.toLowerCase() === name.toLowerCase()){
                                         valid = false;
                                         exists = i;
                                         i = system.path.current.children.length;
@@ -494,7 +504,7 @@
                             else{
                                 let found = false;
                                 for(let i = 0; i < system.path.current.children.length; i++){
-                                    if(system.path.current.children[i].name === params[0]){
+                                    if(system.path.current.children[i].name.toLowerCase() === params[0].toLowerCase()){
                                         if(system.path.current.children[i].type === "dir"){
                                             system.path.current = system.path.current.children[i];
                                             found = true;
@@ -523,7 +533,7 @@
                     else{
                         if(params.length > 0 && params[0] === "-l"){
                             for(let i = 0; i < system.path.current.children.length; i++){
-                                printf(system.path.current.children[i].name+" -- "+system.path.current.children[i].type,0);
+                                printf('"'+system.path.current.children[i].name+"' -- type: "+system.path.current.children[i].type,0);
                             }
                         }
                         else{
@@ -534,7 +544,7 @@
                             else{
                                 let output = "";
                                 for(let i = 0; i < system.path.current.children.length; i++){
-                                    output += system.path.current.children[i].name + " ";
+                                    output += '"'+system.path.current.children[i].name + '" ';
                                 }
                                 printf(output,0);
                             }
@@ -558,7 +568,7 @@
                             if(valid){
                                 let exists = -1;
                                 for(let i = 0; i < system.path.current.children.length; i++){
-                                    if(system.path.current.children[i].name === name){
+                                    if(system.path.current.children[i].name.toLowerCase() === name.toLowerCase()){
                                         valid = false;
                                         exists = i;
                                         i = system.path.current.children.length;
