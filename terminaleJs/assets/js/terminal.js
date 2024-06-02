@@ -1,14 +1,27 @@
 ( ()=>{
+    function theme(t){
+        var r = document.querySelector(':root');
+        r.style.setProperty('--normal', t['normal']);
+        r.style.setProperty('--hover', t['hover']);
+        r.style.setProperty('--active', t['active']);
+        r.style.setProperty('--bars', t['bars']);
+        r.style.setProperty('--start-icon-hover', t['start-icon-hover']);
+        r.style.setProperty('--start-icon-active', t['start-icon-active']);
+        r.style.setProperty('--shortcut-hover', t['shortcut-hover']);
+        r.style.setProperty('--shortcut-active', t['shortcut-active']);
+        r.style.setProperty('--shell-bg', t['shell-bg']);
+        r.style.setProperty('--running-apps', t['running-apps']);
+        r.style.setProperty('--running-apps-bg', t['running-apps-bg']);
+        r.style.setProperty('--open-apps', t['open-apps']);
 
-    
-
+    }
+    //Draggable element
     function dragElement(elmnt) {
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         const titlebar = document.querySelector(".titlebar");
         if (titlebar) {
             titlebar.onmousedown = dragMouseDown;
         }
-    
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
@@ -19,7 +32,6 @@
             // call a function whenever the cursor moves:
             document.onmousemove = elementDrag;
         }
-    
         function elementDrag(e) {
             e = e || window.event;
             e.preventDefault();
@@ -54,7 +66,6 @@
                 }
             }
         }
-    
         function closeDragElement() {
             // stop moving when mouse button is released:
             document.onmouseup = null;
@@ -79,7 +90,92 @@
             "winzoz" : "",
             "os" : "",
             "root" : new fs_node("C:","dir",null)
+        },
+        "theme_blue":{
+            "normal" : "#006eff",
+            "hover" : "#0053bf",
+            "active" : "#00275b",
+            "bars" : "#424242",
+            "start-icon-hover" : "#0053bf",
+            "start-icon-active" : "#00275b",
+            "shortcut-hover" : "#006eff92",
+            "shortcut-active" : "#0053bfac",
+            "shell-bg": "#00275bb8",
+            "running-apps": "#00eeff",
+            "running-apps-bg": "#4b99ff48",
+            "open-apps": "#0000ad"
+        },
+        "theme_red":{
+            "normal" : "#ff0000",
+            "hover" : "#bf0000",
+            "active" : "#7f0000",
+            "bars" : "#3a0000",
+            "start-icon-hover" : "#bf0000",
+            "start-icon-active" : "#7f0000",
+            "shortcut-hover" : "#ff000092",
+            "shortcut-active" : "#bf0000ac",
+            "shell-bg": "#1f0000b8",
+            "running-apps": "#ffa60d",
+            "running-apps-bg": "#7a0a0086",
+            "open-apps": "#7a0000"  
+        },
+        "theme_purple":{
+            "normal" : "#800080",
+            "hover" : "#660066",
+            "active" : "#330033",
+            "bars" : "#1a001a",
+            "start-icon-hover" : "#660066",
+            "start-icon-active" : "#330033",
+            "shortcut-hover" : "#80008092",
+            "shortcut-active" : "#660066ac",
+            "shell-bg": "#160033e7",
+            "running-apps": "#ff00ff",
+            "running-apps-bg": "#66006686",
+            "open-apps": "#330033"
+        },
+        "theme_pink":{
+            "normal" : "#ff69b4",
+            "hover" : "#ff1493",
+            "active" : "#c71585",
+            "bars" : "#8b008b",
+            "start-icon-hover" : "#ff1493",
+            "start-icon-active" : "#c71585",
+            "shortcut-hover" : "#ff69b492",
+            "shortcut-active" : "#ff1493ac",
+            "shell-bg": "#8b008be7",
+            "running-apps": "#ff00ff",
+            "running-apps-bg": "#66006686",
+            "open-apps": "#330033"
+        },
+        "theme_ligthblue":{
+            "normal" : "#00bfff",
+            "hover" : "#009acd",
+            "active" : "#00688b",
+            "bars" : "#003366",
+            "start-icon-hover" : "#009acd",
+            "start-icon-active" : "#00688b",
+            "shortcut-hover" : "#00bfff92",
+            "shortcut-active" : "#009acdac",
+            "shell-bg": "#003366e7",
+            "running-apps": "#00bfff",
+            "running-apps-bg": "#009acd86",
+            "open-apps": "#00688b"
+        },
+        "theme_pastel":{
+            "normal" : "#ff6666",
+            "hover" : "#ff3333",
+            "active" : "#00688b",
+            "bars" : "#003366",
+            "start-icon-hover" : "#ff3333",
+            "start-icon-active" : "#00688b",
+            "shortcut-hover" : "#ff666692",
+            "shortcut-active" : "#ff3333ac",
+            "shell-bg": "#003366e7",
+            "running-apps": "#ff6666",
+            "running-apps-bg": "#ff333386",
+            "open-apps": "#00688b"
         }
+
     }
     function loadSystem(){
         system.path.current = system.path.root;
@@ -99,6 +195,7 @@
         script_start_menu();
         logout_listener();
         login_listener();
+        theme(system.theme_blue);
     }
     function script_start_menu(){
         //start-icon start-button
@@ -146,7 +243,6 @@
     }
     const user_shell = {
         content : "magic@winzoz: ",
-        color: "#4f93ff",
         font_weight: "bold",
         margin: "0 2px"
     }
@@ -173,7 +269,7 @@
             "index" : 0,
             "command" : ""
         },
-        "available_commands" : ["help","clear","exit","time","curl","ls","cd","mkdir","touch","del","changebg"],
+        "available_commands" : ["help","clear","exit","time","curl","ls","cd","mkdir","touch","del","changebg","theme"],
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -417,7 +513,7 @@
                 }
                 user.innerHTML += path;
                 user.innerHTML += "> ";
-                user.style.color = user_shell.color;
+                user.classList.add("user_name");
                 user.style.fontWeight = user_shell.font_weight;
                 user.style.display = "inline";
                 command.appendChild(user);
@@ -487,32 +583,42 @@
                                 ashell_terminal.auto_complete.compatible_commands.push(ashell_terminal.available_commands[i]);
                             }
                         }
-                        let commands_with_namefile = ["cd","del","mkdir","touch"];
-                        //console.log("command: "+ashell_terminal.auto_complete.command);
-                        for(let i = 0; i < commands_with_namefile.length; i++){
-                            if(ashell_terminal.auto_complete.command.startsWith(commands_with_namefile[i])){
-                                let name_file = ashell_terminal.auto_complete.command.substring(commands_with_namefile[i].length+1,ashell_terminal.auto_complete.command.length);
-                                //console.log("name_file: "+name_file.length);
-                                ashell_terminal.auto_complete.compatible_commands = [];
-                                if(name_file.length > 0){
-                                    //console.log("namefile wasn't empty")
-                                    for(let j = 0; j < system.path.current.children.length; j++){
-                                        if(system.path.current.children[j].name.toLowerCase().startsWith(name_file.toLowerCase())){
+                        if(ashell_terminal.auto_complete.command.startsWith("theme")){
+                            ashell_terminal.auto_complete.compatible_commands.push("theme blue");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme red");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme purple");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme pink");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme ligthblue");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme pastel");
+                        }else{
+                            let commands_with_namefile = ["cd","del","mkdir","touch"];
+                            //console.log("command: "+ashell_terminal.auto_complete.command);
+                            for(let i = 0; i < commands_with_namefile.length; i++){
+                                if(ashell_terminal.auto_complete.command.startsWith(commands_with_namefile[i])){
+                                    let name_file = ashell_terminal.auto_complete.command.substring(commands_with_namefile[i].length+1,ashell_terminal.auto_complete.command.length);
+                                    //console.log("name_file: "+name_file.length);
+                                    ashell_terminal.auto_complete.compatible_commands = [];
+                                    if(name_file.length > 0){
+                                        //console.log("namefile wasn't empty")
+                                        for(let j = 0; j < system.path.current.children.length; j++){
+                                            if(system.path.current.children[j].name.toLowerCase().startsWith(name_file.toLowerCase())){
+                                                ashell_terminal.auto_complete.compatible_commands.push(commands_with_namefile[i]+" "+system.path.current.children[j].name);
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        if(ashell_terminal.auto_complete.command.lastIndexOf(" ") !== ashell_terminal.auto_complete.command.length-1)
+                                            ashell_terminal.auto_complete.command += " ";
+                                        for(let j = 0; j < system.path.current.children.length; j++){
                                             ashell_terminal.auto_complete.compatible_commands.push(commands_with_namefile[i]+" "+system.path.current.children[j].name);
                                         }
                                     }
+        
+                                
                                 }
-                                else{
-                                    if(ashell_terminal.auto_complete.command.lastIndexOf(" ") !== ashell_terminal.auto_complete.command.length-1)
-                                        ashell_terminal.auto_complete.command += " ";
-                                    for(let j = 0; j < system.path.current.children.length; j++){
-                                        ashell_terminal.auto_complete.compatible_commands.push(commands_with_namefile[i]+" "+system.path.current.children[j].name);
-                                    }
-                                }
-    
-                            
                             }
                         }
+
 
                         //console.log("commands: "+ashell_terminal.auto_complete.compatible_commands);
                         if(ashell_terminal.auto_complete.compatible_commands.length > 0){
@@ -868,7 +974,11 @@
                                 break;
                             case "changebg":
                                 printf("changebg [code] - changes the background of the terminal",0);
-                                printf("Available codes: 0, 1 or 2",0);
+                                printf("Available codes: 0-9",0);
+                                break;
+                            case "theme":
+                                printf("theme [theme] - changes the theme of the terminal",0);
+                                printf("Available themes: blue, red, purple, pink, ligthblue, pastel",0);
                                 break;
                             default:
                                 printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
@@ -888,6 +998,7 @@
                         printf("touch [file] - creates a new file named [file]",0);
                         printf("del [file] - deletes a file named [file]",0);
                         printf("changebg [code] - changes the background of the terminal",0);
+                        printf("theme [theme] - changes the theme of the terminal",0);
                     }
                     break;
                 case "clear":
@@ -932,6 +1043,27 @@
                                 case 2:
                                     background.style.backgroundImage = "url('assets/img/background-2.jpg')";
                                     break;
+                                case 3:
+                                    background.style.backgroundImage = "url('assets/img/background-3.jpg')";
+                                    break;
+                                case 4:
+                                    background.style.backgroundImage = "url('assets/img/background-4.jpg')";
+                                    break;
+                                case 5:
+                                    background.style.backgroundImage = "url('assets/img/background-5.jpg')";
+                                    break;
+                                case 6:
+                                    background.style.backgroundImage = "url('assets/img/background-6.jpg')";
+                                    break;
+                                case 7:
+                                    background.style.backgroundImage = "url('assets/img/background-7.jpg')";
+                                    break;
+                                case 8:
+                                    background.style.backgroundImage = "url('assets/img/background-8.jpg')";
+                                    break;
+                                case 9:
+                                    background.style.backgroundImage = "url('assets/img/background-9.jpg')";
+                                    break;
                                 default:
                                     printf("Invalid code for the background, valid numbers are: 0, 1 or 2",0);
                                     break;
@@ -943,6 +1075,43 @@
                         printf("Invalid color",0);
                     }
                     break;
+                case "theme":{
+                    if(params.length > 0){
+                        if(params[0] === "-h"){
+                            handle_command("help theme");
+                            enable_user_input = false;
+                        }
+                        else{
+                            switch(params[0]){
+                                case "blue":
+                                    theme(system.theme_blue);
+                                    break;
+                                case "red":
+                                    theme(system.theme_red);
+                                    break;
+                                case "purple":
+                                    theme(system.theme_purple);
+                                    break;
+                                case "pink":
+                                    theme(system.theme_pink);
+                                    break;
+                                case "lightblue":
+                                    theme(system.theme_ligthblue);
+                                    break;
+                                case "pastel":
+                                    theme(system.theme_pastel);
+                                    break;
+                                default:
+                                    printf("Invalid theme",0);
+                                    break;
+                            }
+                        }
+                    }
+                    else{
+                        printf("Invalid theme",0);
+                    }
+                    break;
+                }
                 case "":
                     break;
                 default:
