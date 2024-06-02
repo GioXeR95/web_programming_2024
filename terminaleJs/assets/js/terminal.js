@@ -934,6 +934,7 @@
                             if(params[0].includes("http://") || params[0].includes("https://")){
                                 enable_user_input = false;
                                 const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(params[0]);
+                                //fetch(params[0])
                                 fetch(proxyUrl)
                                 .then((response) => {
                                     if (response.ok) {
@@ -1079,6 +1080,7 @@
                                 enable_user_input = false;
                                 function changeBgFromUrl(url) {
                                     const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                                    //fetch(url)
                                     fetch(proxyUrl)
                                     .then((response) => {
                                         if (response.ok) {
