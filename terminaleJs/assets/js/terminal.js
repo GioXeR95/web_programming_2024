@@ -467,6 +467,7 @@
                         if(ashell_terminal.history.index < ashell_terminal.history.commands.length-1 ){
                             text_span.innerHTML = ashell_terminal.history.commands[++ashell_terminal.history.index];
                         }
+                        moveFocusToEnd(text_span);
                     }
                     //history down
                     if(e.key === "ArrowDown"){
@@ -474,6 +475,7 @@
                         if(ashell_terminal.history.index > 0){
                             text_span.innerHTML = ashell_terminal.history.commands[--ashell_terminal.history.index];
                         }
+                        moveFocusToEnd(text_span);
                     }
                     //console.log("cycle: "+ashell_terminal.auto_complete.cycle)
                     if(e.key === "Tab" && ashell_terminal.auto_complete.cycle===false){
@@ -904,6 +906,29 @@
                         ashell_terminal.opened = false;
                         ashell_terminal.running = false;
                         enable_user_input = false;
+                    }
+                    break;
+                case "changebg":
+                    if(params.length > 0){
+                        const background = document.querySelector(".background");
+                        console.log(params[0])
+                        switch(parseInt(params[0])){
+                            case 0:
+                                background.style.backgroundImage = "url('assets/img/background-0.png')";
+                                break;
+                            case 1:
+                                background.style.backgroundImage = "url('assets/img/background-1.png')";
+                                break;
+                            case 2:
+                                background.style.backgroundImage = "url('assets/img/background-2.jpg')";
+                                break;
+                            default:
+                                printf("Invalid code for the background, valid numbers are: 0, 1 or 2",0);
+                                break;
+                        }
+                    }
+                    else{
+                        printf("Invalid color",0);
                     }
                     break;
                 case "":
