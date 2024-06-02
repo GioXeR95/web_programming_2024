@@ -32,7 +32,26 @@
             if((elmnt.offsetTop - pos2) > 0 && (elmnt.offsetLeft - pos1) > 0 && (elmnt.offsetLeft - pos1) < window.innerWidth - elmnt.clientWidth && (elmnt.offsetTop - pos2) < window.innerHeight - elmnt.clientHeight-45){
                 ashell_terminal.position[0] = elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
                 ashell_terminal.position[1] = elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-                console.log(ashell_terminal.position);
+            }
+            else{
+                if((elmnt.offsetTop - pos2) <= 0){
+                    elmnt.style.top = 0;
+                }
+                if((elmnt.offsetLeft - pos1) <= 0){
+                    elmnt.style.left = 0;
+                }
+                if((elmnt.offsetLeft - pos1) >= window.innerWidth - elmnt.clientWidth){
+                    elmnt.style.left = window.innerWidth - elmnt.clientWidth + "px";
+                }
+                if((elmnt.offsetTop - pos2) >= window.innerHeight - elmnt.clientHeight-45){
+                    elmnt.style.top = window.innerHeight - elmnt.clientHeight-45 + "px";
+                }
+                if(window.innerWidth < elmnt.clientWidth){
+                    elmnt.style.width = window.innerWidth + "px";
+                }
+                if(window.innerHeight < elmnt.clientHeight){
+                    elmnt.style.height = window.innerHeight-50 + "px";
+                }
             }
         }
     
@@ -65,8 +84,8 @@
     function loadSystem(){
         system.path.current = system.path.root;
         system.path.current.children.push(new fs_node("Users","dir",system.path.current));
-        system.path.current.children.push(new fs_node("Program Files","dir",system.path.current));
-        system.path.current.children.push(new fs_node("Program Files (x86)","dir",system.path.current));
+        system.path.current.children.push(new fs_node("Program_Files","dir",system.path.current));
+        system.path.current.children.push(new fs_node("Program_Files_(x86)","dir",system.path.current));
         const win_folder = new fs_node("Winzoz","dir",system.path.current)
         system.path.current.children.push(win_folder);
         const system32_folder = new fs_node("System32","dir",win_folder);
@@ -77,6 +96,53 @@
         system.path.system32 = system32_folder;
         system.path.os = os_file;
         //system.path.current=system.path.current.children[0];
+        script_start_menu();
+        logout_listener();
+        login_listener();
+    }
+    function script_start_menu(){
+        //start-icon start-button
+        const start_button = document.querySelector(".start-button-trick");
+        const start_menu = document.querySelector(".start-menu");
+        start_button.addEventListener("click", ()=>{
+            if(start_menu.style.visibility === "hidden" || start_menu.style.visibility === ""){
+                start_menu.style.visibility = "visible";
+            }
+            else{
+                start_menu.style.visibility = "hidden";
+            }
+        });
+        document.addEventListener("click", (e)=>{
+
+            if(e.target !== start_menu && e.target !== start_button){
+                start_menu.style.visibility = "hidden";
+            }
+        });
+    }
+    function logout_listener(){
+        const logout = document.querySelector(".logout-button");
+        logout.addEventListener("click", ()=>{
+            const logout_screen = document.querySelector(".logout-background");
+            logout_screen.style.visibility = "visible";
+        });
+    }
+    function login_listener(){
+        const login = document.querySelector(".login-button");
+        login.addEventListener("click", ()=>{
+            const login_screen = document.querySelector(".logout-background");
+            const password = document.querySelector("input[type='password']");
+            const result = document.querySelector(".login-result");
+            if(password.value === "admin"){
+                result.innerHTML = "";
+                password.value="";
+                login_screen.style.visibility = "hidden";
+                
+            }
+            else{
+                password.value = "";
+                result.innerHTML = "Wrong password";
+            }
+        });
     }
     const user_shell = {
         content : "magic@winzoz: ",
@@ -95,12 +161,19 @@
             "height" : 250,
             "width" : 500
         },
-        "position" : [20,20],
+        "position" : ['20px','20px'],
         "init" : [["A Shell",0],["Welcome to A Shell! Type 'help' to get started!",0],["",1]],
         "history" : {
             "commands" : [""],
             "index" : 0
         },
+        "auto_complete":{
+            "cycle" : false,
+            "compatible_commands" : [],
+            "index" : 0,
+            "command" : ""
+        },
+        "available_commands" : ["help","clear","exit","time","curl","ls","cd","mkdir","touch","del"],
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -116,12 +189,10 @@
                         </div>
                     </div>
                 </div>`,
-        
-        
     }
+
     function blueScreen(){
         const body =  document.querySelector("body");
-        console.log(body);
         body.innerHTML = "";
         clearTimeout(system.timeout_timer);
         const screen = document.createElement("div");
@@ -218,11 +289,15 @@
                         const terminal = document.createElement("div");
                         terminal.classList.add("terminal");
                         terminal.style.display= "inline-block";
+                        
                         desktop.appendChild(terminal);
                         terminal.innerHTML += ashell_terminal.html;
                         const shell_window = document.querySelector(".window");
                         shell_window.style.height = ashell_terminal.height + "px";
                         shell_window.style.width = ashell_terminal.width + "px";
+                        shell_window.style.position = "absolute";
+                        shell_window.style.top = ashell_terminal.position[0];
+                        shell_window.style.left = ashell_terminal.position[1];
                         dragElement(shell_window);
                         const commands = document.querySelector(".commands");
                         commands.classList.add("enable-select");
@@ -317,6 +392,7 @@
             const shell_window = document.querySelector(".window");
             if(shell_window===null)
                 return;
+
             ashell_terminal.height = shell_window.clientHeight;
             ashell_terminal.width = shell_window.clientWidth;
         }
@@ -363,7 +439,6 @@
                 //give focus to the text_span when clicked on the content
                 text_span.focus();
                 const focus_helper = document.querySelector(".content");
-                console.log(focus_helper);
                 focus_helper.addEventListener("click",()=>{
                     text_span.focus();
                 });
@@ -374,6 +449,7 @@
                     document.execCommand("insertText", false, text);
                 });
                 text_span.addEventListener("keydown", (e)=>{
+                    
                     //input the command
                     if(e.key === "Enter"){ 
                         e.preventDefault();
@@ -399,10 +475,94 @@
                             text_span.innerHTML = ashell_terminal.history.commands[--ashell_terminal.history.index];
                         }
                     }
+                    //console.log("cycle: "+ashell_terminal.auto_complete.cycle)
+                    if(e.key === "Tab" && ashell_terminal.auto_complete.cycle===false){
+                        e.preventDefault();
+                        ashell_terminal.auto_complete.command = replaceAll(text_span.innerHTML.substring(0,text_span.innerHTML.length),"&nbsp;"," ");
+                        
+                        for(let i = 0; i < ashell_terminal.available_commands.length; i++){
+                            if(ashell_terminal.available_commands[i].toLowerCase().startsWith(ashell_terminal.auto_complete.command.toLowerCase())){
+                                ashell_terminal.auto_complete.compatible_commands.push(ashell_terminal.available_commands[i]);
+                            }
+                        }
+                        let commands_with_namefile = ["cd","del","mkdir","touch"];
+                        //console.log("command: "+ashell_terminal.auto_complete.command);
+                        for(let i = 0; i < commands_with_namefile.length; i++){
+                            if(ashell_terminal.auto_complete.command.startsWith(commands_with_namefile[i])){
+                                let name_file = ashell_terminal.auto_complete.command.substring(commands_with_namefile[i].length+1,ashell_terminal.auto_complete.command.length);
+                                //console.log("name_file: "+name_file.length);
+                                ashell_terminal.auto_complete.compatible_commands = [];
+                                if(name_file.length > 0){
+                                    //console.log("namefile wasn't empty")
+                                    for(let j = 0; j < system.path.current.children.length; j++){
+                                        if(system.path.current.children[j].name.toLowerCase().startsWith(name_file.toLowerCase())){
+                                            ashell_terminal.auto_complete.compatible_commands.push(commands_with_namefile[i]+" "+system.path.current.children[j].name);
+                                        }
+                                    }
+                                }
+                                else{
+                                    if(ashell_terminal.auto_complete.command.lastIndexOf(" ") !== ashell_terminal.auto_complete.command.length-1)
+                                        ashell_terminal.auto_complete.command += " ";
+                                    for(let j = 0; j < system.path.current.children.length; j++){
+                                        ashell_terminal.auto_complete.compatible_commands.push(commands_with_namefile[i]+" "+system.path.current.children[j].name);
+                                    }
+                                }
+    
+                            
+                            }
+                        }
+
+                        //console.log("commands: "+ashell_terminal.auto_complete.compatible_commands);
+                        if(ashell_terminal.auto_complete.compatible_commands.length > 0){
+                            ashell_terminal.auto_complete.cycle = true;
+                            ashell_terminal.auto_complete.compatible_commands.push(ashell_terminal.auto_complete.command);
+                            //console.log(ashell_terminal.auto_complete.compatible_commands);
+                            ashell_terminal.auto_complete.index = 0;
+                            text_span.innerHTML = ashell_terminal.auto_complete.compatible_commands[ashell_terminal.auto_complete.index++];
+                            moveFocusToEnd(text_span);
+
+                        }
+                           
+
+
+                    }
+                    else{
+                        if(e.key === "Tab" && ashell_terminal.auto_complete.cycle===true){
+                            e.preventDefault();
+                            /*console.log(ashell_terminal.auto_complete.command);
+                            console.log(ashell_terminal.auto_complete.index)
+                            console.log(ashell_terminal.auto_complete.compatible_commands)*/
+                            text_span.innerHTML = ashell_terminal.auto_complete.compatible_commands[ashell_terminal.auto_complete.index];
+                            if(ashell_terminal.auto_complete.index<ashell_terminal.auto_complete.compatible_commands.length-1){
+                                ashell_terminal.auto_complete.index++;
+                            }
+                            else{
+                                ashell_terminal.auto_complete.index = 0;
+                            }
+                            moveFocusToEnd(text_span);
+                        }
+                        if(e.key !== "Tab" && ashell_terminal.auto_complete.cycle===true){
+                            ashell_terminal.auto_complete.cycle = false;
+                            ashell_terminal.auto_complete.compatible_commands = [];
+                            ashell_terminal.auto_complete.index = 0;
+                        }
+                    }
                 });
             }
-            
-            
+        }
+        function moveFocusToEnd(element){
+            //all of this to give focus on the last character
+            element.focus();
+            let range = document.createRange();
+            let sel = window.getSelection();
+            if(element.childNodes.length>0)
+                range.setStart(element.childNodes[0],element.innerHTML.length);
+            else
+                range.setStart(element, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            //end of the focus
         }
         function replaceAll(str, find, replace) {
             return str.replace(new RegExp(find, 'g'), replace);
@@ -467,6 +627,9 @@
                         }
                         else{
                             let name = params[0];
+                            for(let i = 1; i < params.length; i++){
+                                name += "_"+params[i];
+                            }
                             let valid = true;
                             for(let i = 0; i < name.length; i++){
                                 if(name[i] === "\\"){
@@ -574,6 +737,9 @@
                         }
                         else{
                             let name = params[0];
+                            for(let i = 1; i < params.length; i++){
+                                name += "_"+params[i];
+                            }
                             let valid = true;
                             for(let i = 0; i < name.length; i++){
                                 if(name[i] === "\\"){
@@ -670,7 +836,7 @@
                                 printf("exit - closes the terminal, doesn't takes other params",0);
                                 break;
                             case "help":
-                                printf("help - shows this message",0);
+                                printf("help - shows the list of all commands available.",0);
                                 printf("help [command] - shows help for a specific command",0);
                                 break;
                             case "time":
