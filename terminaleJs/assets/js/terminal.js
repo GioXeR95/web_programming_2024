@@ -586,6 +586,12 @@
                     if(e.key === "Tab" && ashell_terminal.auto_complete.cycle===false){
                         e.preventDefault();
                         ashell_terminal.auto_complete.command = replaceAll(text_span.innerHTML.substring(0,text_span.innerHTML.length),"&nbsp;"," ");
+                        for(let i = 1; i < ashell_terminal.auto_complete.command.length; i++){
+                            if(ashell_terminal.auto_complete.command[i-1]===" " && ashell_terminal.auto_complete.command[i]===" "){
+                                ashell_terminal.auto_complete.command = ashell_terminal.auto_complete.command.substring(0,i-1)+ashell_terminal.auto_complete.command.substring(i,ashell_terminal.auto_complete.command.length);
+                                i--;
+                            }
+                        }
                         
                         for(let i = 0; i < ashell_terminal.available_commands.length; i++){
                             if(ashell_terminal.available_commands[i].toLowerCase().startsWith(ashell_terminal.auto_complete.command.toLowerCase())){
@@ -597,7 +603,7 @@
                             ashell_terminal.auto_complete.compatible_commands.push("theme red");
                             ashell_terminal.auto_complete.compatible_commands.push("theme purple");
                             ashell_terminal.auto_complete.compatible_commands.push("theme pink");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme ligthblue");
+                            ashell_terminal.auto_complete.compatible_commands.push("theme lightblue");
                             ashell_terminal.auto_complete.compatible_commands.push("theme pastel");
                         }else{
                             let commands_with_namefile = ["cd","del","mkdir","touch"];
@@ -685,7 +691,7 @@
             return str.replace(new RegExp(find, 'g'), replace);
         }
 
-        async function handle_command(text){
+        function handle_command(text){
             let enable_user_input = true;
             //Remember: 1 is to put the history in the right order
             //          0 is to not delete any element of the array
@@ -701,6 +707,13 @@
             if(actual_command.includes(" ")){
                 params = actual_command.split(" ");
                 params.shift();
+            }
+            //removes empty strings
+            for(let i = 0; i < params.length; i++){
+                if(params[i] === ""){
+                    params.splice(i,1);
+                    i--;
+                }
             }
             actual_command = actual_command.split(" ")[0];
             actual_command = actual_command.toLowerCase();
@@ -1041,7 +1054,6 @@
                         }
                         else{
                             const background = document.querySelector(".background");
-                            console.log(params[0])
                             switch(parseInt(params[0])){
                                 case 0:
                                     background.style.backgroundImage = "url('assets/img/background-0.png')";
@@ -1074,7 +1086,7 @@
                                     background.style.backgroundImage = "url('assets/img/background-9.jpg')";
                                     break;
                                 default:
-                                    printf("Invalid code for the background, valid numbers are: 0, 1 or 2",0);
+                                    printf("Invalid code for the background, valid numbers are: 0-9",0);
                                     break;
                             }
                         }
