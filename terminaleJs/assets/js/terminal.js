@@ -173,7 +173,7 @@
             "index" : 0,
             "command" : ""
         },
-        "available_commands" : ["help","clear","exit","time","curl","ls","cd","mkdir","touch","del"],
+        "available_commands" : ["help","clear","exit","time","curl","ls","cd","mkdir","touch","del","changebg"],
         "html" : `<div class="window">
                     <div class="titlebar">
                         <div class="group-buttons">
@@ -866,6 +866,10 @@
                             case "del":
                                 printf("del [file] - deletes a file named [file]",0);
                                 break;
+                            case "changebg":
+                                printf("changebg [code] - changes the background of the terminal",0);
+                                printf("Available codes: 0, 1 or 2",0);
+                                break;
                             default:
                                 printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
                                 break;
@@ -883,6 +887,7 @@
                         printf("mkdir [dir] - creates a new directory named [dir]",0);
                         printf("touch [file] - creates a new file named [file]",0);
                         printf("del [file] - deletes a file named [file]",0);
+                        printf("changebg [code] - changes the background of the terminal",0);
                     }
                     break;
                 case "clear":
@@ -910,22 +915,29 @@
                     break;
                 case "changebg":
                     if(params.length > 0){
-                        const background = document.querySelector(".background");
-                        console.log(params[0])
-                        switch(parseInt(params[0])){
-                            case 0:
-                                background.style.backgroundImage = "url('assets/img/background-0.png')";
-                                break;
-                            case 1:
-                                background.style.backgroundImage = "url('assets/img/background-1.png')";
-                                break;
-                            case 2:
-                                background.style.backgroundImage = "url('assets/img/background-2.jpg')";
-                                break;
-                            default:
-                                printf("Invalid code for the background, valid numbers are: 0, 1 or 2",0);
-                                break;
+                        if(params[0] === "-h"){
+                            handle_command("help changebg");
+                            enable_user_input = false;
                         }
+                        else{
+                            const background = document.querySelector(".background");
+                            console.log(params[0])
+                            switch(parseInt(params[0])){
+                                case 0:
+                                    background.style.backgroundImage = "url('assets/img/background-0.png')";
+                                    break;
+                                case 1:
+                                    background.style.backgroundImage = "url('assets/img/background-1.png')";
+                                    break;
+                                case 2:
+                                    background.style.backgroundImage = "url('assets/img/background-2.jpg')";
+                                    break;
+                                default:
+                                    printf("Invalid code for the background, valid numbers are: 0, 1 or 2",0);
+                                    break;
+                            }
+                        }
+
                     }
                     else{
                         printf("Invalid color",0);
