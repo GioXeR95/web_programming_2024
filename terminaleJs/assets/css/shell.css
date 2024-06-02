@@ -5,6 +5,12 @@
 .normal{
     color: var(--normal);
 }
+.help{
+    color: var(--help);
+}
+.textborder{
+    text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 -2px black, 1px 1px black, -1px -1px black, -1px 1px black, 1px -1px black;
+}
 .prevent-select {
     -webkit-user-select: none;
     -ms-user-select: none; 

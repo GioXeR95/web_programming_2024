@@ -13,6 +13,7 @@
         r.style.setProperty('--running-apps', t['running-apps']);
         r.style.setProperty('--running-apps-bg', t['running-apps-bg']);
         r.style.setProperty('--open-apps', t['open-apps']);
+        r.style.setProperty('--help', t['help']);
 
     }
     //Draggable element
@@ -91,90 +92,105 @@
             "os" : "",
             "root" : new fs_node("C:","dir",null)
         },
-        "theme_blue":{
-            "normal" : "#006eff",
-            "hover" : "#0053bf",
-            "active" : "#00275b",
-            "bars" : "#424242",
-            "start-icon-hover" : "#0053bf",
-            "start-icon-active" : "#00275b",
-            "shortcut-hover" : "#006eff92",
-            "shortcut-active" : "#0053bfac",
-            "shell-bg": "#00275bb8",
-            "running-apps": "#00eeff",
-            "running-apps-bg": "#4b99ff48",
-            "open-apps": "#0000ad"
-        },
-        "theme_red":{
-            "normal" : "#ff0000",
-            "hover" : "#bf0000",
-            "active" : "#7f0000",
-            "bars" : "#3a0000",
-            "start-icon-hover" : "#bf0000",
-            "start-icon-active" : "#7f0000",
-            "shortcut-hover" : "#ff000092",
-            "shortcut-active" : "#bf0000ac",
-            "shell-bg": "#1f0000b8",
-            "running-apps": "#ffa60d",
-            "running-apps-bg": "#7a0a0086",
-            "open-apps": "#7a0000"  
-        },
-        "theme_purple":{
-            "normal" : "#800080",
-            "hover" : "#660066",
-            "active" : "#330033",
-            "bars" : "#1a001a",
-            "start-icon-hover" : "#660066",
-            "start-icon-active" : "#330033",
-            "shortcut-hover" : "#80008092",
-            "shortcut-active" : "#660066ac",
-            "shell-bg": "#160033e7",
-            "running-apps": "#ff00ff",
-            "running-apps-bg": "#66006686",
-            "open-apps": "#330033"
-        },
-        "theme_pink":{
-            "normal" : "#ff69b4",
-            "hover" : "#ff1493",
-            "active" : "#c71585",
-            "bars" : "#8b008b",
-            "start-icon-hover" : "#ff1493",
-            "start-icon-active" : "#c71585",
-            "shortcut-hover" : "#ff69b492",
-            "shortcut-active" : "#ff1493ac",
-            "shell-bg": "#8b008be7",
-            "running-apps": "#ff00ff",
-            "running-apps-bg": "#66006686",
-            "open-apps": "#330033"
-        },
-        "theme_ligthblue":{
-            "normal" : "#00bfff",
-            "hover" : "#009acd",
-            "active" : "#00688b",
-            "bars" : "#003366",
-            "start-icon-hover" : "#009acd",
-            "start-icon-active" : "#00688b",
-            "shortcut-hover" : "#00bfff92",
-            "shortcut-active" : "#009acdac",
-            "shell-bg": "#003366e7",
-            "running-apps": "#00bfff",
-            "running-apps-bg": "#009acd86",
-            "open-apps": "#00688b"
-        },
-        "theme_pastel":{
-            "normal" : "#ff6666",
-            "hover" : "#ff3333",
-            "active" : "#00688b",
-            "bars" : "#003366",
-            "start-icon-hover" : "#ff3333",
-            "start-icon-active" : "#00688b",
-            "shortcut-hover" : "#ff666692",
-            "shortcut-active" : "#ff3333ac",
-            "shell-bg": "#003366e7",
-            "running-apps": "#ff6666",
-            "running-apps-bg": "#ff333386",
-            "open-apps": "#00688b"
+        "themes":{
+            "blue":{
+                "name" : "blue",
+                "normal" : "#006eff",
+                "hover" : "#0053bf",
+                "active" : "#00275b",
+                "bars" : "#424242",
+                "start-icon-hover" : "#0053bf",
+                "start-icon-active" : "#00275b",
+                "shortcut-hover" : "#006eff92",
+                "shortcut-active" : "#0053bfac",
+                "shell-bg": "#00275bb8",
+                "running-apps": "#00eeff",
+                "running-apps-bg": "#4b99ff48",
+                "open-apps": "#0000ad",
+                "help": "#00ffff"
+            },
+            "red":{
+                "name" : "red",
+                "normal" : "#ff0000",
+                "hover" : "#bf0000",
+                "active" : "#7f0000",
+                "bars" : "#3a0000",
+                "start-icon-hover" : "#bf0000",
+                "start-icon-active" : "#7f0000",
+                "shortcut-hover" : "#ff000092",
+                "shortcut-active" : "#bf0000ac",
+                "shell-bg": "#1f0000b8",
+                "running-apps": "#ffa60d",
+                "running-apps-bg": "#7a0a0086",
+                "open-apps": "#7a0000",
+                "help": "#ff0f00"
+            },
+            "purple":{
+                "name" : "purple",
+                "normal" : "#800080",
+                "hover" : "#660066",
+                "active" : "#330033",
+                "bars" : "#1a001a",
+                "start-icon-hover" : "#660066",
+                "start-icon-active" : "#330033",
+                "shortcut-hover" : "#80008092",
+                "shortcut-active" : "#660066ac",
+                "shell-bg": "#160033e7",
+                "running-apps": "#ff00ff",
+                "running-apps-bg": "#66006686",
+                "open-apps": "#330033",
+                "help": "#ff00ff"
+            },
+            "pink":{
+                "name" : "pink",
+                "normal" : "#ff69b4",
+                "hover" : "#ff1493",
+                "active" : "#c71585",
+                "bars" : "#8b008b",
+                "start-icon-hover" : "#ff1493",
+                "start-icon-active" : "#c71585",
+                "shortcut-hover" : "#ff69b492",
+                "shortcut-active" : "#ff1493ac",
+                "shell-bg": "#8b008be7",
+                "running-apps": "#ff00ff",
+                "running-apps-bg": "#66006686",
+                "open-apps": "#330033",
+                "help": "#000000"
+            },
+            "lightblue":{
+                "name" : "lightblue",
+                "normal" : "#00bfff",
+                "hover" : "#009acd",
+                "active" : "#00688b",
+                "bars" : "#003366",
+                "start-icon-hover" : "#009acd",
+                "start-icon-active" : "#00688b",
+                "shortcut-hover" : "#00bfff92",
+                "shortcut-active" : "#009acdac",
+                "shell-bg": "#003366e7",
+                "running-apps": "#00bfff",
+                "running-apps-bg": "#009acd86",
+                "open-apps": "#00688b",
+                "help": "#00ffff"
+            },
+            "pastel":{
+                "name" : "pastel",
+                "normal" : "#ff6666",
+                "hover" : "#ff3333",
+                "active" : "#00688b",
+                "bars" : "#003366",
+                "start-icon-hover" : "#ff3333",
+                "start-icon-active" : "#00688b",
+                "shortcut-hover" : "#ff666692",
+                "shortcut-active" : "#ff3333ac",
+                "shell-bg": "#003366e7",
+                "running-apps": "#ff6666",
+                "running-apps-bg": "#ff333386",
+                "open-apps": "#00688b",
+                "help": "#00ffff"
+            }
         }
+
 
     }
     function loadSystem(){
@@ -195,7 +211,7 @@
         script_start_menu();
         logout_listener();
         login_listener();
-        theme(system.theme_blue);
+        theme(system.themes.blue);
     }
     function script_start_menu(){
         //start-icon start-button
@@ -917,10 +933,10 @@
                         else{
                             if(params[0].includes("http://") || params[0].includes("https://")){
                                 enable_user_input = false;
-                                fetch(params[0])
+                                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(params[0]);
+                                fetch(proxyUrl)
                                 .then((response) => {
                                     if (response.ok) {
-                                      //return response.json();
                                       return response.text();
                                     }
                                     throw new Error('Something went wrong');
@@ -960,47 +976,52 @@
                     if(params.length > 0){
                         switch(params[0]){
                             case "clear":
-                                printf("clear - clears the terminal, doesn't takes other params",0);
+                                printf("<span class='help bold' >clear</span> - clears the terminal, doesn't takes other params",0);
                                 break;
                             case "exit":
-                                printf("exit - closes the terminal, doesn't takes other params",0);
+                                printf("<span class='help bold' >exit</span> - closes the terminal, doesn't takes other params",0);
                                 break;
                             case "help":
-                                printf("help - shows the list of all commands available.",0);
-                                printf("help [command] - shows help for a specific command",0);
+                                printf("<span class='help bold' >help</span> - shows the list of all commands available.",0);
+                                printf("<span class='help bold' >help [command]</span> - shows help for a specific command",0);
                                 break;
                             case "time":
-                                printf("time - shows the current time, doesn't takes other params",0);
+                                printf("<span class='help bold' >time</span> - shows the current time, doesn't takes other params",0);
                                 break;
                             case "curl":
-                                printf("curl [url] - fetches the content of a website",0);
-                                printf("curl -h - shows this message",0);
+                                printf("<span class='help bold' >curl [url]</span> - fetches the content of a website",0);
+                                printf("<span class='help bold' >curl -h</span> - shows this message",0);
                                 printf("the [url] must contain 'http://' or 'https://'. For testing use 'https://jsonplaceholder.typicode.com/users'",0);
                                 break;
                             case "ls":
-                                printf("ls - shows the files and directories in the current directory",0);
-                                printf("ls -l - shows the files and directories in the current directory with more information",0);
+                                printf("<span class='help bold' >ls</span> - shows the files and directories in the current directory",0);
+                                printf("<span class='help bold' >ls -l</span> - shows the files and directories in the current directory with more information",0);
                                 break;
                             case "cd":
-                                printf("cd [dir] - changes the current directory to [dir]",0);
-                                printf("cd .. - goes to the parent directory",0);
+                                printf("<span class='help bold' >cd [dir]</span> - changes the current directory to [dir]",0);
+                                printf("<span class='help bold' >cd ..</span> - goes to the parent directory",0);
                                 break;
                             case "mkdir":
-                                printf("mkdir [dir] - creates a new directory named [dir]",0);
+                                printf("<span class='help bold' >mkdir [dir]</span> - creates a new directory named [dir]",0);
                                 break;
                             case "touch":
-                                printf("touch [file] - creates a new file named [file]",0);
+                                printf("<span class='help bold' >touch [file]</span> - creates a new file named [file]",0);
                                 break;
                             case "del":
-                                printf("del [file] - deletes a file named [file]",0);
+                                printf("<span class='help bold' >del [file]</span> - deletes a file named [file]",0);
                                 break;
                             case "changebg":
-                                printf("changebg [code] - changes the background of the terminal",0);
+                                printf("<span class='help bold' >changebg [code]</span> - changes the background of the terminal",0);
+                                printf("<span class='help bold' >changebg -u [url]</span> - changes the background of the terminal with an image from the url",0);
                                 printf("Available codes: 0-9",0);
                                 break;
                             case "theme":
-                                printf("theme [theme] - changes the theme of the terminal",0);
-                                printf("Available themes: blue, red, purple, pink, ligthblue, pastel",0);
+                                printf("<span class='help bold' >theme [theme]</span> - changes the theme of the terminal",0);
+                                let string_to_print = "Available themes: ";
+                                for(let theme in system.themes){
+                                    string_to_print += "<span class='textborder' style='color:"+system.themes[theme].normal+";'>"+theme+"</span>, ";
+                                }
+                                printf(string_to_print,0);
                                 break;
                             default:
                                 printf("Command '"+params[0]+"' not found. Type 'help' to see what A Shell can do.",0);
@@ -1009,18 +1030,18 @@
                     }
                     else{
                         printf("Available commands:",0);
-                        printf("help - shows this message",0);
-                        printf("clear - clears the terminal",0);
-                        printf("exit - closes the terminal",0);
-                        printf("time - shows the current time",0);
-                        printf("curl [url] - fetches the content of a website",0);
-                        printf("ls - shows the files and directories in the current directory",0);
-                        printf("cd [dir] - changes the current directory to [dir]",0);
-                        printf("mkdir [dir] - creates a new directory named [dir]",0);
-                        printf("touch [file] - creates a new file named [file]",0);
-                        printf("del [file] - deletes a file named [file]",0);
-                        printf("changebg [code] - changes the background of the terminal",0);
-                        printf("theme [theme] - changes the theme of the terminal",0);
+                        printf("<span class='help bold' >help</span> - shows this message",0);
+                        printf("<span class='help bold' >clear</span> - clears the terminal",0);
+                        printf("<span class='help bold' >exit</span> - closes the terminal",0);
+                        printf("<span class='help bold' >time</span> - shows the current time",0);
+                        printf("<span class='help bold' >curl</span> [url] - fetches the content of a website",0);
+                        printf("<span class='help bold' >ls</span> - shows the files and directories in the current directory",0);
+                        printf("<span class='help bold' >cd</span> [dir] - changes the current directory to [dir]",0);
+                        printf("<span class='help bold' >mkdir</span> [dir] - creates a new directory named [dir]",0);
+                        printf("<span class='help bold' >touch</span> [file] - creates a new file named [file]",0);
+                        printf("<span class='help bold' >del</span> [file] - deletes a file named [file]",0);
+                        printf("<span class='help bold' >changebg</span> [code] | -u [url] - changes the background of the terminal",0);
+                        printf("<span class='help bold' >theme</span> [theme] - changes the theme of the terminal",0);
                     }
                     break;
                 case "clear":
@@ -1054,41 +1075,80 @@
                         }
                         else{
                             const background = document.querySelector(".background");
-                            switch(parseInt(params[0])){
-                                case 0:
-                                    background.style.backgroundImage = "url('assets/img/background-0.png')";
-                                    break;
-                                case 1:
-                                    background.style.backgroundImage = "url('assets/img/background-1.png')";
-                                    break;
-                                case 2:
-                                    background.style.backgroundImage = "url('assets/img/background-2.jpg')";
-                                    break;
-                                case 3:
-                                    background.style.backgroundImage = "url('assets/img/background-3.jpg')";
-                                    break;
-                                case 4:
-                                    background.style.backgroundImage = "url('assets/img/background-4.jpg')";
-                                    break;
-                                case 5:
-                                    background.style.backgroundImage = "url('assets/img/background-5.jpg')";
-                                    break;
-                                case 6:
-                                    background.style.backgroundImage = "url('assets/img/background-6.jpg')";
-                                    break;
-                                case 7:
-                                    background.style.backgroundImage = "url('assets/img/background-7.jpg')";
-                                    break;
-                                case 8:
-                                    background.style.backgroundImage = "url('assets/img/background-8.jpg')";
-                                    break;
-                                case 9:
-                                    background.style.backgroundImage = "url('assets/img/background-9.jpg')";
-                                    break;
-                                default:
-                                    printf("Invalid code for the background, valid numbers are: 0-9",0);
-                                    break;
+                            if(params[0] === "-u"){
+                                enable_user_input = false;
+                                function changeBgFromUrl(url) {
+                                    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                                    fetch(proxyUrl)
+                                    .then((response) => {
+                                        if (response.ok) {
+                                          return response.blob();
+                                        }
+                                        throw new Error('Something went wrong');
+                                    })
+                                    .then(data => {
+                                        if(data.type !== "image/jpeg" && data.type !== "image/png"){
+                                            printf("Invalid image type, must be a jpeg or a png.",0);
+                                            printf("",1);
+                                            return;
+                                        }else{
+                                            var reader = new FileReader();
+                                            reader.readAsDataURL(data); 
+                                            reader.onloadend = function() {
+                                                var base64data = reader.result;                
+                                                background.style.backgroundImage = "url('"+base64data+"')";
+                                                printf("Background changed",0);
+                                                printf("",1);
+                                            }
+                                        
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        printf("Error: "+error,0);
+                                        printf("",1);
+                                    });
+                                }
+                                changeBgFromUrl(params[1]);
                             }
+                            else{
+                                
+                                switch(parseInt(params[0])){
+                                    case 0:
+                                        background.style.backgroundImage = "url('assets/img/background-0.png')";
+                                        break;
+                                    case 1:
+                                        background.style.backgroundImage = "url('assets/img/background-1.png')";
+                                        break;
+                                    case 2:
+                                        background.style.backgroundImage = "url('assets/img/background-2.jpg')";
+                                        break;
+                                    case 3:
+                                        background.style.backgroundImage = "url('assets/img/background-3.jpg')";
+                                        break;
+                                    case 4:
+                                        background.style.backgroundImage = "url('assets/img/background-4.jpg')";
+                                        break;
+                                    case 5:
+                                        background.style.backgroundImage = "url('assets/img/background-5.jpg')";
+                                        break;
+                                    case 6:
+                                        background.style.backgroundImage = "url('assets/img/background-6.jpg')";
+                                        break;
+                                    case 7:
+                                        background.style.backgroundImage = "url('assets/img/background-7.jpg')";
+                                        break;
+                                    case 8:
+                                        background.style.backgroundImage = "url('assets/img/background-8.jpg')";
+                                        break;
+                                    case 9:
+                                        background.style.backgroundImage = "url('assets/img/background-9.jpg')";
+                                        break;
+                                    default:
+                                        printf("Invalid code for the background, valid numbers are: 0-9",0);
+                                        break;
+                                }
+                            }
+
                         }
 
                     }
@@ -1105,22 +1165,22 @@
                         else{
                             switch(params[0]){
                                 case "blue":
-                                    theme(system.theme_blue);
+                                    theme(system.themes.blue);
                                     break;
                                 case "red":
-                                    theme(system.theme_red);
+                                    theme(system.themes.red);
                                     break;
                                 case "purple":
-                                    theme(system.theme_purple);
+                                    theme(system.themes.purple);
                                     break;
                                 case "pink":
-                                    theme(system.theme_pink);
+                                    theme(system.themes.pink);
                                     break;
                                 case "lightblue":
-                                    theme(system.theme_ligthblue);
+                                    theme(system.themes.lightblue);
                                     break;
                                 case "pastel":
-                                    theme(system.theme_pastel);
+                                    theme(system.themes.pastel);
                                     break;
                                 default:
                                     printf("Invalid theme",0);
