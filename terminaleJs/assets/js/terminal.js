@@ -225,11 +225,12 @@
     }
     function login_listener(){
         const login = document.querySelector(".login-button");
-        login.addEventListener("click", ()=>{
+        const password = document.querySelector("input[type='password']");
+        const check_login = ()=>{
             const login_screen = document.querySelector(".logout-background");
             const password = document.querySelector("input[type='password']");
             const result = document.querySelector(".login-result");
-            if(password.value === "admin"){
+            if(password.value === "root"){
                 result.innerHTML = "";
                 password.value="";
                 login_screen.style.visibility = "hidden";
@@ -239,7 +240,15 @@
                 password.value = "";
                 result.innerHTML = "Wrong password";
             }
+        }
+        login.addEventListener("click", check_login);
+        password.addEventListener("keydown", (e)=>{
+            if(e.key === "Enter"){
+                check_login();
+            }
         });
+
+        
     }
     const user_shell = {
         content : "magic@winzoz: ",
