@@ -1,5 +1,5 @@
 ( ()=>{
-    function theme(t){
+    function change_theme(t){
         var r = document.querySelector(':root');
         r.style.setProperty('--normal', t['normal']);
         r.style.setProperty('--hover', t['hover']);
@@ -220,6 +220,22 @@
                 "running-apps-bg": "#00cc0086",
                 "open-apps": "#009900",
                 "help": "#00ffff"
+            },
+            "olive":{
+                "name" : "olive",
+                "normal" : "#ffff00",
+                "hover" : "#cccc00",
+                "active" : "#999900",
+                "bars" : "#666600",
+                "start-icon-hover" : "#cccc00",
+                "start-icon-active" : "#999900",
+                "shortcut-hover" : "#ffff0092",
+                "shortcut-active" : "#cccc00ac",
+                "shell-bg": "#666600e7",
+                "running-apps": "#ffff00",
+                "running-apps-bg": "#cccc0086",
+                "open-apps": "#999900",
+                "help": "#00ffff"
             }
         }
 
@@ -243,7 +259,7 @@
         script_start_menu();
         logout_listener();
         login_listener();
-        theme(system.themes.blue);
+        change_theme(system.themes.blue);
     }
     function script_start_menu(){
         //start-icon start-button
@@ -472,23 +488,23 @@
                 }
             });
         }
-        
+        function close_terminal(){
+            //close the terminal
+            //visual changes
+            const terminal = document.querySelector(".terminal");
+            //taskbar visual changes
+            const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
+            app_taskbar.classList.remove("app-icon-running");
+            app_taskbar.classList.remove("app-icon-open");
+            terminal.remove();
+            //logic changes
+            ashell_terminal.opened = false;
+            ashell_terminal.running = false;
+        }
         function make_close_button_work(){
             if(ashell_terminal.running && ashell_terminal.opened){
                 const close_button = document.querySelector(".button.close");
-                close_button.addEventListener("click", ()=>{
-                    //close the terminal
-                    //visual changes
-                    const terminal = document.querySelector(".terminal");
-                    //taskbar visual changes
-                    const app_taskbar = document.querySelector(".start-icon.shell.app-launch");
-                    app_taskbar.classList.remove("app-icon-running");
-                    app_taskbar.classList.remove("app-icon-open");
-                    terminal.remove();
-                    //logic changes
-                    ashell_terminal.opened = false;
-                    ashell_terminal.running = false;
-                });
+                close_button.addEventListener("click", close_terminal);
             }
         }
         function make_minimize_button_work(){
@@ -647,12 +663,12 @@
                             }
                         }
                         if(ashell_terminal.auto_complete.command.startsWith("theme")){
-                            ashell_terminal.auto_complete.compatible_commands.push("theme blue");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme red");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme purple");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme pink");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme lightblue");
-                            ashell_terminal.auto_complete.compatible_commands.push("theme pastel");
+
+                            
+                            for(let theme in system.themes){
+                                ashell_terminal.auto_complete.compatible_commands.push("theme "+theme);
+                            }
+                            
                         }else{
                             let commands_with_namefile = ["cd","del","mkdir","touch"];
                             //console.log("command: "+ashell_terminal.auto_complete.command);
@@ -1093,11 +1109,8 @@
                         enable_user_input = false;
                     }
                     else{
-                        const terminal = document.querySelector(".terminal");
-                        terminal.remove();
-                        ashell_terminal.opened = false;
-                        ashell_terminal.running = false;
-                        enable_user_input = false;
+                        close_terminal();
+
                     }
                     break;
                 case "changebg":
@@ -1197,34 +1210,21 @@
                             enable_user_input = false;
                         }
                         else{
-                            switch(params[0]){
-                                case "blue":
-                                    theme(system.themes.blue);
-                                    break;
-                                case "red":
-                                    theme(system.themes.red);
-                                    break;
-                                case "purple":
-                                    theme(system.themes.purple);
-                                    break;
-                                case "pink":
-                                    theme(system.themes.pink);
-                                    break;
-                                case "lightblue":
-                                    theme(system.themes.lightblue);
-                                    break;
-                                case "pastel":
-                                    theme(system.themes.pastel);
-                                    break;
-                                case "aqua":
-                                    theme(system.themes.aqua);
-                                    break;
-                                case "green":
-                                    theme(system.themes.green);
-                                    break;
-                                default:
-                                    printf("Invalid theme",0);
-                                    break;
+                            let check=false;
+                            let name="";
+                            for(let theme in system.themes){
+                                if(params[0] === theme){
+                                    change_theme(system.themes[theme]);
+                                    check=true;
+                                    name=theme;
+                                }
+                            }
+                            if(!check){
+                                printf("Invalid theme",0);
+                            }
+                            else{
+                                printf("Theme changed to </span class='normal textborder'>"+name+"</span>",0);
+                            
                             }
                         }
                     }
