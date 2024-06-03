@@ -188,6 +188,38 @@
                 "running-apps-bg": "#ff333386",
                 "open-apps": "#00688b",
                 "help": "#00ffff"
+            },
+            "aqua":{
+                "name" : "aqua",
+                "normal" : "#00ffff",
+                "hover" : "#00cccc",
+                "active" : "#009999",
+                "bars" : "#006666",
+                "start-icon-hover" : "#00cccc",
+                "start-icon-active" : "#009999",
+                "shortcut-hover" : "#00ffff92",
+                "shortcut-active" : "#00ccccac",
+                "shell-bg": "#006666e7",
+                "running-apps": "#00ffff",
+                "running-apps-bg": "#00cccc86",
+                "open-apps": "#009999",
+                "help": "#00ffff"
+            },
+            "green":{
+                "name" : "green",
+                "normal" : "#00ff00",
+                "hover" : "#00cc00",
+                "active" : "#009900",
+                "bars" : "#006600",
+                "start-icon-hover" : "#00cc00",
+                "start-icon-active" : "#009900",
+                "shortcut-hover" : "#00ff0092",
+                "shortcut-active" : "#00cc00ac",
+                "shell-bg": "#006600e7",
+                "running-apps": "#00ff00",
+                "running-apps-bg": "#00cc0086",
+                "open-apps": "#009900",
+                "help": "#00ffff"
             }
         }
 
@@ -931,7 +963,7 @@
                             enable_user_input = false;
                         }
                         else{
-                            if(params[0].includes("http://") || params[0].includes("https://")){
+                            if(params[0].length > 0 && (params[0].startsWith("http://") || params[0].startsWith("https://"))){
                                 enable_user_input = false;
                                 const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(params[0]);
                                 //fetch(params[0])
@@ -1089,7 +1121,7 @@
                                         throw new Error('Something went wrong');
                                     })
                                     .then(data => {
-                                        if(data.type !== "image/jpeg" && data.type !== "image/png"){
+                                        if(data.type !== "image/jpeg" && data.type !== "image/jpg" && data.type !== "image/png"){
                                             printf("Invalid image type, must be a jpeg or a png.",0);
                                             printf("",1);
                                             return;
@@ -1183,6 +1215,12 @@
                                     break;
                                 case "pastel":
                                     theme(system.themes.pastel);
+                                    break;
+                                case "aqua":
+                                    theme(system.themes.aqua);
+                                    break;
+                                case "green":
+                                    theme(system.themes.green);
                                     break;
                                 default:
                                     printf("Invalid theme",0);
