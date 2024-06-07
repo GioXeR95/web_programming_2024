@@ -26,11 +26,11 @@
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // get the mouse cursor position at startup:
+            // gets the mouse position.
             pos3 = e.clientX;
             pos4 = e.clientY;
             document.onmouseup = closeDragElement;
-            // call a function whenever the cursor moves:
+            //event on mouse move
             document.onmousemove = elementDrag;
         }
         function elementDrag(e) {
@@ -68,7 +68,7 @@
             }
         }
         function closeDragElement() {
-            // stop moving when mouse button is released:
+            // removes events on mouse up
             document.onmouseup = null;
             document.onmousemove = null;
         }
