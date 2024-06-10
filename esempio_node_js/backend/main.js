@@ -1,8 +1,10 @@
 //const logger = require("./logger");
 const logger = require("my-logger")
 const os = require("os");
-const http = require("http");
+
 const express = require("express");
+
+const {createServer, serverWebEvents} = require("./my_modules/httpServer");
 
 const user = os.userInfo().username;
 
@@ -14,19 +16,6 @@ logger.log(os.totalmem());
 logger.log(os.freemem());
 
 
-const httpServer = http.createServer((req, res) => {
-    switch(req.url) {
-        case "/":
-            res.write("Hello World!");
-            break;
-        case "/about":
-            res.write("About Us!");
-            break;
-        default:
-            res.write("404 Not Found!");
-            break;
-    }
-    res.end();
-});
 
+const httpServer = createServer();
 httpServer.listen(3000);
