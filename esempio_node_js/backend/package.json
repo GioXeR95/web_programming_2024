@@ -1,0 +1,15 @@
+{
+  "name": "primo_progetto_be",
+  "version": "1.0.0",
+  "description": "Progetto di test su nodejs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "author": "Mei",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
