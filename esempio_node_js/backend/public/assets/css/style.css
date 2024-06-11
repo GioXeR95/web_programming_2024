@@ -1,0 +1,16 @@
+.bar{
+    border: 2px solid #000;
+    border-radius: 5px;
+    height: 80px;
+    background-color: grey;
+    overflow: hidden;
+}
+
+.bar > .bar-value{
+    border-radius: 5px;
+    height: 80px;
+    background-color:deeppink;
+    line-height: 80px;
+    text-align: center;
+
+}

@@ -22,14 +22,26 @@ httpServer.listen(3000);*/
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.status(200).send("Hello World!");
-    res.end();
-});
+app.use(express.static("./public"));
+
+
 app.get("/about", (req, res) => {
     res.status(200).send("About Us!");
     res.end();
 });
+app.get("/api/memory", (req, res) => {
+    res.status(200).send({
+        totalMemory: os.totalmem()
+    });
+    res.end();
+});
+app.get("/api/memory/free", (req, res) => {
+    res.status(200).send({
+        freeMemory: os.freemem()
+    });
+    res.end();
+});
+
 app.get("*", (req, res) => {
     res.status(404).send("404 Not Found!");
     res.end();

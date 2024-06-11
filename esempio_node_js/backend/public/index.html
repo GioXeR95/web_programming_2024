@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ram Usage!</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+    <h1>Ram Usage:</h1>
+    <!--<p>Usage: {{ $ramUsage }} MB</p>
+    <p>Total: {{ $ramTotal }} MB</p>
+    <p>Free: {{ $ramFree }} MB</p>-->
+
+    <div class="bar"><div class="bar-value"></div></div>
+    <script>
+        const bar = document.querySelector('.bar>.bar-value');
+        
+        (async () =>{
+            const reps = await fetch("/api/memory");
+            const data = await reps.json();
+            console.log("max memory: ", data.totalMemory);
+            setInterval(async () => {
+                const resp = await fetch('/api/memory/free');
+                const free = await resp.json();
+                console.log("free memory: ", free.freeMemory);
+                const percentage = parseInt(((data.totalMemory-free.freeMemory)/data.totalMemory)*100);
+                console.log(percentage);
+                bar.style.width = percentage+`%`;
+                bar.innerHTML = percentage+`%`;
+                //console.log(free/data)
+            }, 2000);
+        })();
+        
+    </script>
+</body>
+</html>
