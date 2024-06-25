@@ -30,7 +30,7 @@ serverSocketIO.on("connection", (socketClient) => {
 
     socketClient.on("userLogged", (nickname)=>{
         socketClient["nickname"]=nickname;
-        console.log("user logged: "+nickname);
+        console.log("user logged: "+socketClient.nickname);
         socketClient.broadcast.emit("userLogged", nickname);
         const userObject = {nickname: nickname, id: socketClient.id};
         listUsers.push(userObject);

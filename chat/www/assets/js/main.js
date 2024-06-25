@@ -67,6 +67,8 @@ const sendMessage = () =>{
                                 <img src="https://ui-avatars.com/api/?name='+nicknameUser+'" class="rounded-circle user_img_msg" />\
                             </div>\
                         </div>';
+    containerMessages.innerHTML+=htmlEvent;
+
 }
 const insertMessage = (nickname, message) =>{
     const ora = new Date();
@@ -77,11 +79,12 @@ const insertMessage = (nickname, message) =>{
                                     class="rounded-circle user_img_msg" />\
                             </div>\
                             <div class="msg_cotainer">\
-                                <div class="text-muted h6">Username</div>\
+                                <div class="text-muted h6">'+nickname+'</div>\
                                 '+message+'\
                                 <span class="msg_time mt-4">'+stringaOra+'</span>\
                             </div>\
                         </div>';
+    containerMessages.innerHTML+=htmlEvent;
 }
 btnSend.addEventListener('click', () => {
     sendMessage();
